@@ -2,12 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from .models import Greeting
+import .checkFilms
 
 # Create your views here.
 def index(request):
     # return HttpResponse('Hello from Python!')
     #return render(request, "index.html")
-    return HttpResponse("Hello from Heroku...")
+    return HttpResponse(checkFilms.main())
     
 
 def db(request):
