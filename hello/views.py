@@ -8,7 +8,7 @@ import hello.checkFilms
 def index(request):
     # return HttpResponse('Hello from Python!')
     #return render(request, "index.html")
-    return HttpResponse(checkFilms.main())
+    return HttpResponse(hello.checkFilms.main())
     
 
 def db(request):
