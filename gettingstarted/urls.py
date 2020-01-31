@@ -6,6 +6,15 @@ admin.autodiscover()
 
 import hello.views
 
+#for auth:
+from django.contrib.auth import views as auth_views
+from django.urls import path
+from django.conf.urls import include
+#for signup:
+from . import views
+
+
+
 # To add a new path, first import the app:
 # import blog
 #
@@ -18,4 +27,11 @@ urlpatterns = [
     path("", hello.views.index, name="index"),
     path("db/", hello.views.db, name="db"),
     path("admin/", admin.site.urls),
+
+	path("register/", views.register, name="register"),
+	path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'),name='logout'),
+]
+
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
