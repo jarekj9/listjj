@@ -9,7 +9,7 @@ def main():
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor() 
-    cursor.execute("CREATE TABLE vendors (vendor_id SERIAL PRIMARY KEY, vendor_name VARCHAR(255) NOT NULL);")
+    cursor.execute("CREATE TABLE IF NOT EXISTS vendors (vendor_id SERIAL PRIMARY KEY, vendor_name VARCHAR(255) NOT NULL);")
     conn.commit()
     cursor.execute('INSERT INTO vendors(vendor_name) VALUES(%s);', 'Jarek')
     conn.commit()
