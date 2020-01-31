@@ -44,7 +44,7 @@ def getTitles():
     pattern=re.compile(r'(HDRip|XviD|AC3-EVO|HDCAM|WEB-DL|\(|\))',re.IGNORECASE) #helps to filter out some piratebay title text
 
     for index,link in enumerate(links):
-
+        if index > 15: break
         try:
             piratebayTitle = link.text
             if re.search(r'hdcam',piratebayTitle.lower()): continue
