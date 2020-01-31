@@ -6,6 +6,7 @@ import hello.jarek
 
 #for auth:
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth import logout, authenticate, login
 #for registration:
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
