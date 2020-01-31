@@ -2,13 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from .models import Greeting
-import hello.checkFilms
+import hello.jarek
 
 # Create your views here.
 def index(request):
     # return HttpResponse('Hello from Python!')
     #return render(request, "index.html")
-    return HttpResponse(hello.checkFilms.main())
+    return HttpResponse(hello.jarek.main())
     
 
 def db(request):
