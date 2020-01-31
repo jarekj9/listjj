@@ -40,12 +40,12 @@ def register(request):
                 print(form.error_messages[msg])
 
             return render(request = request,
-                          template_name = "accounts/signup.html",
+                          template_name = "registration/signup.html",
                           context={"form":form})
 
     form = UserRegisterForm
     return render(request = request,
-                  template_name = "accounts/signup.html",
+                  template_name = "registration/signup.html",
                   context={"form":form})
  
 
