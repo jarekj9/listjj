@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .models import Greeting
-import hello.jarek
+import app.jarek
 
 #for auth:
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -65,7 +65,7 @@ def db(request):
 def index(request):
     # return HttpResponse('Hello from Python!')
     #return render(request, "index.html")
-    return HttpResponse(hello.jarek.main())
+    return HttpResponse(app.jarek.main())
  
 
 
