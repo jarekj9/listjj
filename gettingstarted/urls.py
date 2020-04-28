@@ -4,7 +4,7 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-import hello.views
+import app.views
 
 #for auth:
 from django.contrib.auth import views as auth_views
@@ -24,11 +24,11 @@ from django.conf.urls import include
 # Learn more here: https://docs.djangoproject.com/en/2.1/topics/http/urls/
 
 urlpatterns = [
-    path("", hello.views.index, name="index"),
-    path("db/", hello.views.db, name="db"),
+    path("", app.views.index, name="index"),
+    path("db/", app.views.db, name="db"),
     path("admin/", admin.site.urls),
 
-	path("register/", hello.views.register, name="register"),
+	path("register/", ap.views.register, name="register"),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'),name='logout'),
 ]
 
