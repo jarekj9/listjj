@@ -4,7 +4,8 @@ from .models import *
 
 def main():
     # Create a new record using the model's constructor.
-    if not Categories.objects.exits(category='inne'):
+    
+    if not Categories.objects.filter(category='inne').count():
         record = Categories(category='inne')
         record.save()
     
