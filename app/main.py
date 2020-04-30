@@ -23,6 +23,7 @@ def main():
     print(all_records)
     print('end')
     
+    return 'Jarek'
     
 
 if __name__ == '__main__':
