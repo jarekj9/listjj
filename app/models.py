@@ -6,7 +6,7 @@ class Greeting(models.Model):
 
 
 class Categories(models.Model):
-    category = models.CharField(max_length=100, unique=True)
+    category = models.CharField(max_length=100, unique=True, primary_key=True)
     
 class Journal(models.Model):
     when = models.DateTimeField("date created", auto_now_add=True)

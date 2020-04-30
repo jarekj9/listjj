@@ -8,7 +8,7 @@ def main():
     record.save()
     
     
-    record = Journal(login='Jarek', value=100, category='inne', description='Test')
+    record = Journal(login='Jarek', value=100, category=Categories.objects.get(category='inne'), description='Test')
 
     # Save the object into the database.
     record.save()
