@@ -21,8 +21,7 @@ def main():
     
     all_records = Journal.objects.all()
     
-    for line in all_records:
-        print(line)
+    print(all_records)
     
     
 
