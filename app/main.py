@@ -4,7 +4,11 @@ from .models import *
 
 def main():
     # Create a new record using the model's constructor.
-    record = Journal(login='Jarek', value=100, description='Test')
+    record = Categories(category='inne')
+    record.save()
+    
+    
+    record = Journal(login='Jarek', value=100, category='inne', description='Test')
 
     # Save the object into the database.
     record.save()
