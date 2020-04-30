@@ -13,4 +13,3 @@ class Journal(models.Model):
     
 class Categories(models.Model):
     category = models.CharField(max_length=100)
-```
