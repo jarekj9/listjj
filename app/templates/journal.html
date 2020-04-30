@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Expenses Journal</title>
+
+</head>
+<body>
+
+
+<div>
+    <h1><a href="/">Journal</a></h1>
+</div>
+
+{% for record in all_records %}
+    <div>
+        <p>Post: {{ record.login }}</p>
+        <p>{{ record.value }}</p>
+        <p>{{ record.description }}</p>
+    </div>
+{% endfor %}
+
+
+</body>
+</html>

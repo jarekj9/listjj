@@ -62,9 +62,9 @@ def db(request):
 @login_required
 @user_passes_test(is_member)
 def index(request):
-    # return HttpResponse('Hello from Python!')
-    #return render(request, "index.html")
-    return HttpResponse(app.main.main())
+
+    return render(request, "journal.html", {"all_records":app.main.main()})
+    #return HttpResponse(app.main.main())
  
 
 
