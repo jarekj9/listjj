@@ -4,8 +4,9 @@ from .models import *
 
 def main():
     # Create a new record using the model's constructor.
-    record = Categories(category='inne')
-    record.save()
+    if not Categories.objects.get('inne'):
+        record = Categories(category='inne')
+        record.save()
     
     
     record = Journal(login='Jarek', value=100, category=Categories.objects.get(category='inne'), description='Test')
