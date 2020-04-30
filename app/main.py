@@ -10,14 +10,16 @@ def main():
         record.save()
     
     all_records = Categories.objects.all()
-    output.append(str(all_records))
+    for item in all_records:
+        output.append(item)
     
     record = Journal(login='Jarek', value=100, category=Categories.objects.get(category='inne'), description='Test')
     record.save()
     
     
     all_records = Journal.objects.all()
-    output.append(str(all_records))
+    for item in all_records:
+        output.append(item)
     
     return output
     
