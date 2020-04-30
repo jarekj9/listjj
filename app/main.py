@@ -11,7 +11,7 @@ def main():
     
     all_records = Categories.objects.all()
     for item in all_records:
-        output.append(item)
+        output.append(item.category)
     
     record = Journal(login='Jarek', value=100, category=Categories.objects.get(category='inne'), description='Test')
     record.save()
@@ -19,7 +19,7 @@ def main():
     
     all_records = Journal.objects.all()
     for item in all_records:
-        output.append(item)
+        output.append(item.description)
     
     return output
     
