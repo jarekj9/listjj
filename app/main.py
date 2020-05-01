@@ -16,8 +16,9 @@ def main():
     all_records = Journal.objects.all()
     for item in all_records:
         output.append({'login':item.login,
+                       'date':item.date,
                        'value':item.value,
-                       'category':item.category,
+                       'category':item.category.select_related('category'),
                        'description':item.description})
     
     return output
