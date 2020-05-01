@@ -13,9 +13,9 @@
 
 {% for record in all_records %}
     <div>
-        <p>Post: {{ record.get('login') }}</p>
-        <p>{{ record.get('value') }}</p>
-        <p>{{ record.get('description') }}</p>
+        <p>Post: {{ record.login }}</p>
+        <p>{{ record.value }}</p>
+        <p>{{ record.description }}</p>
     </div>
 {% endfor %}
 
