@@ -49,7 +49,7 @@ def register(request):
                   context={"form":form})
  
 class NoteForm(forms.Form):
-    value = forms.IntegerField(max_length = 100) 
+    value = forms.IntegerField() 
     category = ['inne', 'mieszkanie', 'samochod']
     description = forms.CharField(widget=forms.Textarea)
 
