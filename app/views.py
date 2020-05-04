@@ -87,11 +87,11 @@ def index(request):
             note = Journal(value=value, category=Categories.objects.get(category=category), description=description)
             note.save()
         
-            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform}, 'message':'Note saved.')
+            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':'Note saved.'})
         else:
-            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform}, 'message':'Wrong form input')
+            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':'Wrong form input'})
         
     else: 
-        return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform}, 'message':'')
+        return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':''})
 
 
