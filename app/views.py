@@ -76,7 +76,7 @@ def db(request):
 def index(request):
     noteform = NoteForm()
     all_records = app.main.main()
-    ''' 
+    
     if request.method == "POST":
            
         form = NoteForm(request.POST)
@@ -96,6 +96,4 @@ def index(request):
     else: 
         return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
 
-     ''' 
-    return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
 
