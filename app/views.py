@@ -60,18 +60,6 @@ def register(request):
                   template_name = "registration/signup.html",
                   context={"form":form})
  
-def add_note(request):
-    if request.method == "POST":
-        form = NoteForm(request.POST)
-        if form.is_valid():
-            value = form.cleaned_data['value']
-            category = form.cleaned_data['category']
-            description = form.cleaned_data['description']
-            note = Journal(value=value, category=category, description=description)
-            note.save()
-            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
-        else:
-            pass
             
 def db(request):
 
@@ -86,10 +74,23 @@ def db(request):
 @login_required
 @user_passes_test(is_member)
 def index(request):
-    noteform = NoteForm()
-    all_records = app.main.main()
-    return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
-    #return HttpResponse(app.main.main())
+
+    if request.method == "POST":
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            value = form.cleaned_data['value']
+            category = form.cleaned_data['category']
+            description = form.cleaned_data['description']
+            note = Journal(value=value, category=category, description=description)
+            note.save()
+            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
+        else:
+            pass
+    else:   
+        noteform = NoteForm()
+        all_records = app.main.main()
+        return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
+        #return HttpResponse(app.main.main())
  
 
 
