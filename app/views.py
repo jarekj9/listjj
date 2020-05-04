@@ -57,8 +57,8 @@ class NoteForm(forms.Form):
     ]
     
     value = forms.IntegerField() 
-    category = forms.CharField(widget=forms.Select(choices=categories,attrs={'style': 'border: 10px;'}))
-    description = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'style': 'border: 10px;'}))
+    category = forms.CharField(widget=forms.Select(choices=categories))
+    description = forms.CharField(max_length=100)
 
 
 def db(request):
