@@ -74,7 +74,9 @@ def db(request):
 @login_required
 @user_passes_test(is_member)
 def index(request):
-
+    noteform = NoteForm()
+    all_records = app.main.main()
+    
     if request.method == "POST":
         form = NoteForm(request.POST)
         if form.is_valid():
@@ -87,10 +89,8 @@ def index(request):
         else:
             pass
     else:   
-        noteform = NoteForm()
-        all_records = app.main.main()
         return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
-        #return HttpResponse(app.main.main())
+
  
 
 
