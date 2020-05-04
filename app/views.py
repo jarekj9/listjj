@@ -29,7 +29,7 @@ class UserRegisterForm(UserCreationForm):
 class NoteForm(forms.Form):
 
     categories= [
-    ('inne', 'inne'),
+    ('inne', '1'),
     ('samochod', 'samochod'),
     ('mieszkanie', 'mieszkanie'),
     ]
@@ -84,7 +84,7 @@ def index(request):
             value = form.cleaned_data['value']
             category = form.cleaned_data['category']
             description = form.cleaned_data['description']
-            note = Journal(value=value, category=category, description=description)
+            note = Journal(value=value, category=Categories.objects.get(category=category), description=description)
             note.save()
         
             return HttpResponse("Form saved", content_type='text/plain')
