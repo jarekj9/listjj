@@ -76,9 +76,9 @@ def db(request):
 def index(request):
     noteform = NoteForm()
     all_records = app.main.main()
-    
+    '''
     if request.method == "POST":
-        '''
+        
         form = NoteForm(request.POST)
         if form.is_valid():
             value = form.cleaned_data['value']
@@ -90,8 +90,8 @@ def index(request):
             return HttpResponse("Form saved", content_type='text/plain')
         else:
             return HttpResponse("Wrong form data", content_type='text/plain')
-        '''
-        return HttpResponse('<h1>Page was found</h1>'
+    '''    
+        return HttpResponse('<h1>Page was found</h1>')
     else:   
         return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
 
