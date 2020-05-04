@@ -78,6 +78,7 @@ def index(request):
     all_records = app.main.main()
     
     if request.method == "POST":
+        '''
         form = NoteForm(request.POST)
         if form.is_valid():
             value = form.cleaned_data['value']
@@ -85,6 +86,7 @@ def index(request):
             description = form.cleaned_data['description']
             note = Journal(value=value, category=category, description=description)
             note.save()
+        '''
             return HttpResponse("Form saved", content_type='text/plain')
         else:
             return HttpResponse("Wrong form data", content_type='text/plain')
