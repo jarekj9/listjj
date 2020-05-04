@@ -91,7 +91,7 @@ def index(request):
         else:
             return HttpResponse("Wrong form data", content_type='text/plain')
         '''
-        return HttpResponse("Form saved", content_type='text/plain')
+        return HttpResponse('<h1>Page was found</h1>'
     else:   
         return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
 
