@@ -87,7 +87,7 @@ def index(request):
             note.save()
             return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
         else:
-            pass
+            return HttpResponse("Wrong form data", content_type='text/plain')
     else:   
         return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
 
