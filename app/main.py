@@ -18,7 +18,7 @@ def main():
         output.append({'login':item.login,
                        'date':item.date,
                        'value':item.value,
-                       'category':item.category.category, #Categories.objects.get(id=item.category.id).category,
+                       'category':item.category.category,  #related object
                        'description':item.description})
     
     return output

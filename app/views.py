@@ -63,7 +63,8 @@ def db(request):
 @user_passes_test(is_member)
 def index(request):
 
-    return render(request, "journal.html", {"all_records":app.main.main()})
+    all_records = app.main.main()
+    return render(request, "add_note_form.html", {"all_records":app.main.main()})
     #return HttpResponse(app.main.main())
  
 
