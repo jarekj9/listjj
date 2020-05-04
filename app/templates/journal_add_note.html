@@ -5,7 +5,7 @@
   <h2>Add entry</h2>
   <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
-	  {{ noteform }}
+	  {{ noteform.as_p }}
       <button type="submit">Save</button>
   </form>
 
