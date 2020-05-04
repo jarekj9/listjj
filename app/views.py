@@ -87,7 +87,7 @@ def index(request):
             note = Journal(value=value, category=category, description=description)
             note.save()
         '''
-            return HttpResponse("Form saved", content_type='text/plain')
+        return HttpResponse("Form saved", content_type='text/plain')
         else:
             return HttpResponse("Wrong form data", content_type='text/plain')
     else:   
