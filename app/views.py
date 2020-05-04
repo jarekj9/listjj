@@ -48,6 +48,11 @@ def register(request):
                   template_name = "registration/signup.html",
                   context={"form":form})
  
+class NoteForm(forms.Form):
+    value = forms.IntegerField(max_length = 100) 
+    category = ['inne', 'mieszkanie', 'samochod']
+    description = forms.CharField(widget=forms.Textarea)
+
 
 def db(request):
 
@@ -62,9 +67,9 @@ def db(request):
 @login_required
 @user_passes_test(is_member)
 def index(request):
-
+    noteform = NoteForm()
     all_records = app.main.main()
-    return render(request, "journal_add_note.html", {"all_records":app.main.main()})
+    return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
     #return HttpResponse(app.main.main())
  
 
