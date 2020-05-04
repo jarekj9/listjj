@@ -9,8 +9,8 @@ def main():
         record = Categories(category='inne')
         record.save()
         
-    record = Journal(login='Jarek', value=100, category=Categories.objects.get(category='inne'), description='Test')
-    record.save()
+    #record = Journal(login='Jarek', value=100, category=Categories.objects.get(category='inne'), description='Test')
+    #record.save()
     
     
     all_records = Journal.objects.all()
