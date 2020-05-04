@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
+from .models import *
 import app.main
 
 #for auth:
@@ -25,6 +25,18 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+        
+class NoteForm(forms.Form):
+
+    categories= [
+    ('inne', 'inne'),
+    ('samochod', 'samochod'),
+    ('mieszkanie', 'mieszkanie'),
+    ]
+    
+    value = forms.IntegerField() 
+    category = forms.CharField(widget=forms.Select(choices=categories))
+    description = forms.CharField(max_length=100)
 
 def register(request):
     if request.method == "POST":
@@ -48,19 +60,19 @@ def register(request):
                   template_name = "registration/signup.html",
                   context={"form":form})
  
-class NoteForm(forms.Form):
-
-    categories= [
-    ('inne', 'inne'),
-    ('samochod', 'samochod'),
-    ('mieszkanie', 'mieszkanie'),
-    ]
-    
-    value = forms.IntegerField() 
-    category = forms.CharField(widget=forms.Select(choices=categories))
-    description = forms.CharField(max_length=100)
-
-
+def add_note(request):
+    if request.method == "POST":
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            value = form.cleaned_data['value']
+            category = form.cleaned_data['category']
+            description = form.cleaned_data['description']
+            note = Journal(value=value, category=category, description=description)
+            note.save()
+            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
+        else:
+            pass
+            
 def db(request):
 
     greeting = Greeting()
