@@ -18,7 +18,7 @@ def main():
         output.append({'login':item.login,
                        'date':item.date,
                        'value':item.value,
-                       'category':item.category.select_related('category'),
+                       'category':item.category,
                        'description':item.description})
     
     return output
