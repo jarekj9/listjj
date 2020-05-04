@@ -3,7 +3,7 @@
   "description": "App",
   "image": "heroku/python",
   "repository": "https://github.com/heroku/expenses-journal",
-  "keywords": ["python", "django" ],
+  "keywords": ["python3", "django" ],
   "addons": [ "heroku-postgresql" ],
   "env": {
     "SECRET_KEY": {
@@ -14,8 +14,8 @@
   "environments": {
     "test": {
       "scripts": {
-        "test-setup": "python manage.py collectstatic --noinput",
-        "test": "python manage.py test"
+        "test-setup": "python3 manage.py collectstatic --noinput",
+        "test": "python3 manage.py test"
       }
     }
   }
