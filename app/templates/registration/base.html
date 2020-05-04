@@ -1,118 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Expenses Journal</title>
+<ul class="sidebar-nav">
 
-<style>
-div.paleBlueRows {
-  font-family: "Times New Roman", Times, serif;
-  border: 1px solid #FFFFFF;
-  width: 350px;
-  height: 200px;
-  text-align: center;
-  border-collapse: collapse;
-}
-.divTable.paleBlueRows .divTableCell, .divTable.paleBlueRows .divTableHead {
-  border: 1px solid #FFFFFF;
-  padding: 3px 2px;
-}
-.divTable.paleBlueRows .divTableBody .divTableCell {
-  font-size: 13px;
-}
-.divTable.paleBlueRows .divTableRow:nth-child(even) {
-  background: #D0E4F5;
-}
-.divTable.paleBlueRows .divTableHeading {
-  background: #0B6FA4;
-  border-bottom: 5px solid #FFFFFF;
-}
-.divTable.paleBlueRows .divTableHeading .divTableHead {
-  font-size: 17px;
-  font-weight: bold;
-  color: #FFFFFF;
-  text-align: center;
-  border-left: 2px solid #FFFFFF;
-}
-.divTable.paleBlueRows .divTableHeading .divTableHead:first-child {
-  border-left: none;
-}
+   {% if user.is_authenticated %}
+     <li>User: {{ user.get_username }}</li>
+     <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+   {% else %}
+     <li><a href="{% url 'login'%}?next={{request.path}}">Login Here, if you already have approved account</a></li>
+   {% endif %} 
+  </ul>
 
-.paleBlueRows .tableFootStyle {
-  font-size: 14px;
-  font-weight: bold;
-  color: #333333;
-  background: #D0E4F5;
-  border-top: 3px solid #444444;
-}
-.paleBlueRows .tableFootStyle {
-  font-size: 14px;
-}
-/* DivTable.com */
-.divTable{ display: table; }
-.divTableRow { display: table-row; }
-.divTableHeading { display: table-header-group;}
-.divTableCell, .divTableHead { display: table-cell;}
-.divTableHeading { display: table-header-group;}
-.divTableFoot { display: table-footer-group;}
-.divTableBody { display: table-row-group;}
-</style>
-</head>
-<body>
-
-
-<div>
-    <h1><a href="/">Journal</a></h1>
-</div>
 
 <div class="container">
     {% block content %}
     {% endblock %}
 </div>
-
-
-<div class="divTable paleBlueRows">
-	<div class="divTableHeading">
-		<div class="divTableRow">
-			<div class="divTableHead">head1</div>
-			<div class="divTableHead">head2</div>
-			<div class="divTableHead">head3</div>
-			<div class="divTableHead">head4</div>
-		</div>
-	</div>
-
-	<div class="divTableBody">
-
-		<div class="divTableRow">
-			<div class="divTableCell">cell1_1</div>
-			<div class="divTableCell">cell2_1</div>
-			<div class="divTableCell">cell3_1</div>
-			<div class="divTableCell">cell4_1</div>
-		</div>
-
-		{% for record in all_records %}
-			<div class="divTableRow">
-				<div class="divTableCell">{{ record.date }}</div>
-				<div class="divTableCell">{{ record.value }}</div>
-				<div class="divTableCell">{{ record.category }}</div>
-				<div class="divTableCell">{{ record.description }}</div>
-			</div>
-		{% endfor %}
-
-
-	</div>
-
-
-	<div class="divTableFoot tableFootStyle">
-		<div class="divTableRow">
-			<div class="divTableCell">foot1</div>
-			<div class="divTableCell">foot2</div>
-			<div class="divTableCell">foot3</div>
-			<div class="divTableCell">foot4</div>
-		</div>
-	</div>
-</div>
-
-</body>
-</html>
-
-
