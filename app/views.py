@@ -64,7 +64,7 @@ def db(request):
 def index(request):
 
     all_records = app.main.main()
-    return render(request, "add_note_form.html", {"all_records":app.main.main()})
+    return render(request, "journal_add_note.html", {"all_records":app.main.main()})
     #return HttpResponse(app.main.main())
  
 
