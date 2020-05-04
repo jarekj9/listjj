@@ -87,13 +87,11 @@ def index(request):
             note = Journal(value=value, category=Categories.objects.get(category=category), description=description)
             note.save()
         
-            return HttpResponse("Form saved", content_type='text/plain')
+            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform}, 'message':'Note saved.')
         else:
-            return HttpResponse("Wrong form data", content_type='text/plain')
-           
-        return HttpResponse('<h1>Page was found</h1>')
-    
+            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform}, 'message':'Wrong form input')
+        
     else: 
-        return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform})
+        return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform}, 'message':'')
 
 
