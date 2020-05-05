@@ -41,7 +41,8 @@ class NoteForm(forms.Form):
 def deletenote(request):
     if request.method == "POST":
         id = request.POST.get('id')
-        return HttpResponse(id)
+        Journal.objects.filter(id=id).delete()
+        return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':'Deleted Note'})
     else:
         return HttpResponse("No post request")
 
