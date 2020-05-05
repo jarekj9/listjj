@@ -39,6 +39,10 @@ class NoteForm(forms.Form):
     description = forms.CharField(max_length=100)
 
 def deletenote(request):
+
+    noteform = NoteForm()
+    all_records = app.main.main()
+
     if request.method == "POST":
         id = request.POST.get('id')
         Journal.objects.filter(id=id).delete()
