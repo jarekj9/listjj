@@ -15,7 +15,7 @@ from django.conf.urls import include
 
 urlpatterns = [
     path("", app.views.index, name="index"),
-    path("", app.views.deletenote, name="deletenote"),
+    url(r'deletenote/$', app.views.deletenote, name="deletenote"),
     path("db/", app.views.db, name="db"),
     path("admin/", admin.site.urls),
 	path("register/", app.views.register, name="register"),
