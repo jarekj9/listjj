@@ -42,6 +42,8 @@ def deletenote(request):
     if request.method == "POST":
         id = request.GET.get('id')
         return HttpResponse(id)
+    else:
+        return HttpResponse("No post request")
 
 def register(request):
     if request.method == "POST":
