@@ -12,7 +12,7 @@ from django.urls import path
 from django.conf.urls import include
 
 
-
+ 
 urlpatterns = [
     path("", app.views.index, name="index"),
     url(r'deletenote/$', app.views.deletenote, name="deletenote"),
