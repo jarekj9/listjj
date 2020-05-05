@@ -16,7 +16,7 @@ from django.conf.urls import include
 urlpatterns = [
     path("", app.views.index, name="index"),
     url(r'deletenote/$', app.views.deletenote, name="deletenote"),
-    path("db/", app.views.db, name="db"),
+    path("db2/", app.views.db, name="db2"),
     path("admin/", admin.site.urls),
 	path("register/", app.views.register, name="register"),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'),name='logout'),
