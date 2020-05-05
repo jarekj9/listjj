@@ -29,7 +29,7 @@ class UserRegisterForm(UserCreationForm):
 class NoteForm(forms.Form):
 
     categories= [
-    ('inne', '1'),
+    ('inne', 'inne'),
     ('samochod', 'samochod'),
     ('mieszkanie', 'mieszkanie'),
     ]
