@@ -41,7 +41,7 @@ class NoteForm(forms.Form):
 def deletenote(request):
     if request.method == "POST":
         id = request.GET.get('id')
-        return HttpResponse(id)
+        return HttpResponse('TEST')
     else:
         return HttpResponse("No post request")
 
