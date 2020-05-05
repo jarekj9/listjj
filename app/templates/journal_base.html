@@ -95,8 +95,9 @@ div.paleBlueRows {
 				<div class="divTableCell">{{ record.category }}</div>
 				<div class="divTableCell">{{ record.description }}</div>				
 				<div class="divTableCell">
-					<form method="post" action="{% url 'index' %}">
-						{% csrf_token %}
+					<form method="post" action="{% url 'deletenote'%}">
+						{% csrf_token %}	
+						<input type="hidden" name="id" value="{{ record.id }}" />
 						<button type="submit">Delete note {{ record.id }}</button>
 					</form>
 				</div>

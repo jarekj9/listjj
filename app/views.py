@@ -38,6 +38,11 @@ class NoteForm(forms.Form):
     category = forms.CharField(widget=forms.Select(choices=categories))
     description = forms.CharField(max_length=100)
 
+def deletenote(request):
+    if request.method == "POST":
+        id = request.GET.get('id')
+        return HttpResponse(id)
+
 def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)   			#can use simpler: UserCreationForm

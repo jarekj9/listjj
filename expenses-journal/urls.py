@@ -25,9 +25,9 @@ from django.conf.urls import include
 
 urlpatterns = [
     path("", app.views.index, name="index"),
+    path("deletenote/", app.views.deletenote),
     path("db/", app.views.db, name="db"),
     path("admin/", admin.site.urls),
-
 	path("register/", app.views.register, name="register"),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'),name='logout'),
 ]
