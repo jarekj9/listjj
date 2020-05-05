@@ -97,7 +97,7 @@ div.paleBlueRows {
 				<div class="divTableCell">
 					<form method="post" action="{% url 'deletenote' %}">
 						{% csrf_token %}	
-						<input type="hidden" name="id" value="{{ record.id }}" />
+						<input type="hidden" name="id" value="lala" />
 						<button type="submit">Delete note {{ record.id }}</button>
 					</form>
 				</div>
