@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
-import app.main
-
 #for auth:
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout, authenticate, login
@@ -10,6 +8,11 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+
+import app.main
+import datetime
+
+
 
 #filter only users, that are members of group
 def is_member(user):
@@ -38,8 +41,11 @@ class NoteForm(forms.Form):
     category = forms.CharField(widget=forms.Select(choices=categories))
     description = forms.CharField(max_length=100)
 
-def deletenote(request):
+class DateForm(forms.Form):
+    day = forms.DateField(initial=datetime.date.today)
 
+def deletenote(request):
+    dateform = DateForm()
     noteform = NoteForm()
     all_records = app.main.main()
 
@@ -86,6 +92,7 @@ def db(request):
 @login_required
 @user_passes_test(is_member)
 def index(request):
+    dateform = DateForm()
     noteform = NoteForm()
     all_records = app.main.main()
     

@@ -5,6 +5,7 @@
   <h2>Add entry</h2>
   <form method="post" action="{% url 'index' %}">
       {% csrf_token %}
+	  {{ dateform }}
 	  {{ noteform }}
       <button type="submit">Save</button>
   </form>
