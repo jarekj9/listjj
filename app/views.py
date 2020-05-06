@@ -36,7 +36,7 @@ class NoteForm(forms.Form):
     ('samochod', 'samochod'),
     ('mieszkanie', 'mieszkanie'),
     ]
-    day = forms.DateTimeField(initial=datetime.datetime.now)
+    day = forms.DateField(initial=datetime.date.today
     value = forms.IntegerField() 
     category = forms.CharField(widget=forms.Select(choices=categories))
     description = forms.CharField(max_length=100)
@@ -97,10 +97,11 @@ def index(request):
            
         form = NoteForm(request.POST)
         if form.is_valid():
+            date = form.cleaned_data['date']
             value = form.cleaned_data['value']
             category = form.cleaned_data['category']
             description = form.cleaned_data['description']
-            note = Journal(value=value, category=Categories.objects.get(category=category), description=description)
+            note = Journal(data=data, value=value, category=Categories.objects.get(category=category), description=description)
             note.save()
         
             return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':'Note saved.'})
