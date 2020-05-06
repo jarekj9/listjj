@@ -7,7 +7,6 @@ def main():
     output=[]
     if not Categories.objects.filter(category='inne').count():
         record = Categories(category='inne', login=User.objects.get(username='jarek'))
-        Categories.objects.get(category=category)
         record.save()
         
     #record = Journal(login='Jarek', value=100, category=Categories.objects.get(category='inne'), description='Test')
