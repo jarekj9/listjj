@@ -1,0 +1,7 @@
+
+  <h2>Add category</h2>
+  <form method="post" action="{% url 'addcategory' %}">
+      {% csrf_token %}
+	  {{ categoryform }}
+      <button type="submit">Save</button>
+  </form>

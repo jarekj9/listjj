@@ -16,7 +16,7 @@ urlpatterns = [
     path("", app.views.index, name="index"),
     path("deletenote", app.views.deletenote, name="deletenote"),
     path("addnote", app.views.addnote, name="addnote"),
-    path("db2/", app.views.db, name="db2"),
+    path("addcategory", app.views.addcategory, name="addcategory"),
     path("admin/", admin.site.urls),
 	path("register/", app.views.register, name="register"),
     path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'),name='logout'),

@@ -29,7 +29,6 @@ class UserRegisterForm(UserCreationForm):
         fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
         
 class NoteForm(forms.Form):
-
     categories= [
     ('inne', 'inne'),
     ('samochod', 'samochod'),
@@ -39,6 +38,9 @@ class NoteForm(forms.Form):
     value = forms.FloatField() 
     category = forms.CharField(widget=forms.Select(choices=categories))
     description = forms.CharField(max_length=100)
+
+class CategoryForm(forms.Form):
+    category = forms.CharField(max_length=100)
 
 def addnote(request):   
     if request.method == "POST":     
@@ -64,6 +66,19 @@ def deletenote(request):
         return redirect("/")
     else:
         return HttpResponse("No POST request")
+
+def addcategory(request):   
+    if request.method == "POST":     
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.cleaned_data['category']
+            newcategory = Categories(category=category)
+            newcategory.save()
+            return redirect("/")
+        else:
+            return HttpResponse("Wrong user input")
+    else:
+        return render(request, "journal_add_category.html", {'categoryform':form})
 
 def register(request):
     if request.method == "POST":
