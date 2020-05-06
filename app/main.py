@@ -6,7 +6,7 @@ def main():
 
     output=[]
     if not Categories.objects.filter(category='inne').count():
-        record = Categories(category='inne', login=User.objects.get(username='jarek').login_id)
+        record = Categories(category='inne', login=User.objects.get(username='jarek').id)
         Categories.objects.get(category=category)
         record.save()
         
