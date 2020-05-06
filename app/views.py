@@ -29,7 +29,7 @@ class UserRegisterForm(UserCreationForm):
         fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
         
 class NoteForm(forms.Form):
-    allcategories = Categories.objects.values_list('category','id')
+    allcategories = Categories.objects.values_list('id','category')
     date = forms.DateField(initial=datetime.date.today)
     value = forms.FloatField() 
     category = forms.CharField(widget=forms.Select(choices=allcategories))
