@@ -91,7 +91,7 @@ div.paleBlueRows {
 
 		{% for record in all_records %}
 			<div class="divTableRow">
-				<div class="divTableCell">{{ record.date }}</div>
+				<div class="divTableCell">{{ record.login }} {{ record.date }}</div>
 				<div class="divTableCell">{{ record.value }}</div>
 				<div class="divTableCell">{{ record.category }}</div>
 				<div class="divTableCell">{{ record.description }}</div>				
