@@ -17,7 +17,7 @@ def main():
     for item in all_records:
         output.append({'id':item.id,
                        'login':item.login,
-                       'date':item.date,
+                       'date':item.date.strftime("%d-%m-%Y"),
                        'value':item.value,
                        'category':item.category.category,  #related object
                        'description':item.description})

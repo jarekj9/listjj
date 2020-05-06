@@ -97,7 +97,7 @@ def index(request):
            
         form = NoteForm(request.POST)
         if form.is_valid():
-            date = form.cleaned_data['date'].strftime("%d-%m-%Y")
+            date = form.cleaned_data['date']
             value = form.cleaned_data['value']
             category = form.cleaned_data['category']
             description = form.cleaned_data['description']
