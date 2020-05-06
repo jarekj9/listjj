@@ -36,7 +36,7 @@ class NoteForm(forms.Form):
     ('mieszkanie', 'mieszkanie'),
     ]
     date = forms.DateField(initial=datetime.date.today)
-    value = forms.IntegerField() 
+    value = forms.FloatField() 
     category = forms.CharField(widget=forms.Select(choices=categories))
     description = forms.CharField(max_length=100)
 
