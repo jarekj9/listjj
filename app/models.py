@@ -9,7 +9,7 @@ class Categories(models.Model):
     category = models.CharField(max_length=100, unique=True)
     
 class Journal(models.Model):
-    date = models.DateField("date created")
+    date = models.DateField()
     login = models.CharField(max_length=30)
     value =  models.FloatField()
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
