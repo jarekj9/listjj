@@ -49,9 +49,8 @@ def addnote(request):
             category = form.cleaned_data['category']
             description = form.cleaned_data['description']
             note = Journal(date=date, value=value, category=Categories.objects.get(category=category), description=description)
-            note.save()
-        
-            return redirect("/")
+
+            return HttpResponse(note.save())
         else:
             return HttpResponse("Wrong user input")
     else:
