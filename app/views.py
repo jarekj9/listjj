@@ -67,9 +67,9 @@ def deletenote(request):
     else:
         return HttpResponse("No POST request")
 
-def addcategory(request):   
+def addcategory(request):
+    form = CategoryForm(request.POST)
     if request.method == "POST":     
-        form = CategoryForm(request.POST)
         if form.is_valid():
             category = form.cleaned_data['category']
             newcategory = Categories(category=category)
