@@ -44,9 +44,9 @@ def addnote(request):
         if form.is_valid():
             date = form.cleaned_data['date']
             value = form.cleaned_data['value']
-            category = form.cleaned_data['category']
+            category = form.cleaned_data['category']  #actually this is id
             description = form.cleaned_data['description']
-            note = Journal(login=request.user, date=date, value=value, category=category, description=description)  #Categories.objects.get(id=category)
+            note = Journal(login=request.user, date=date, value=value, category=Categories.objects.get(id=category), description=description)
             note.save()
             return redirect("/")
         else:
