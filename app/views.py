@@ -72,7 +72,7 @@ def addcategory(request):
     if request.method == "POST":     
         if form.is_valid():
             category = form.cleaned_data['category']
-            newcategory = Categories(category=category)
+            newcategory = Categories(login=request.user, category=category)
             newcategory.save()
             return redirect("/")
         else:
