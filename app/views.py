@@ -101,7 +101,7 @@ def index(request):
             value = form.cleaned_data['value']
             category = form.cleaned_data['category']
             description = form.cleaned_data['description']
-            note = Journal(data=data, value=value, category=Categories.objects.get(category=category), description=description)
+            note = Journal(date=date, value=value, category=Categories.objects.get(category=category), description=description)
             note.save()
         
             return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':'Note saved.'})
