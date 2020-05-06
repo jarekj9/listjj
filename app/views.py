@@ -36,16 +36,14 @@ class NoteForm(forms.Form):
     ('samochod', 'samochod'),
     ('mieszkanie', 'mieszkanie'),
     ]
-    
+    day = forms.DateField(initial=datetime.date.today)
     value = forms.IntegerField() 
     category = forms.CharField(widget=forms.Select(choices=categories))
     description = forms.CharField(max_length=100)
 
-class DateForm(forms.Form):
-    day = forms.DateField(initial=datetime.date.today)
+    
 
 def deletenote(request):
-    dateform = DateForm()
     noteform = NoteForm()
     all_records = app.main.main()
 
@@ -92,7 +90,6 @@ def db(request):
 @login_required
 @user_passes_test(is_member)
 def index(request):
-    dateform = DateForm()
     noteform = NoteForm()
     all_records = app.main.main()
     
