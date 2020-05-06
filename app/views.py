@@ -13,7 +13,6 @@ import app.main
 import datetime
 
 
-
 #filter only users, that are members of group
 def is_member(user):
     return user.groups.filter(name='accessGroup').exists()
@@ -41,18 +40,31 @@ class NoteForm(forms.Form):
     category = forms.CharField(widget=forms.Select(choices=categories))
     description = forms.CharField(max_length=100)
 
-    
+def addnote(request):   
+    if request.method == "POST":     
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            date = form.cleaned_data['date']
+            value = form.cleaned_data['value']
+            category = form.cleaned_data['category']
+            description = form.cleaned_data['description']
+            note = Journal(date=date, value=value, category=Categories.objects.get(category=category), description=description)
+            note.save()
+        
+            return redirect("/")
+        else:
+            return HttpResponse("Wrong user input")
+    else:
+        return HttpResponse("No POST request")
+
 
 def deletenote(request):
-    noteform = NoteForm()
-    all_records = app.main.main()
-
     if request.method == "POST":
         id = request.POST.get('id')
         Journal.objects.filter(id=id).delete()
-        return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':'Deleted Note'})
+        return redirect("/")
     else:
-        return HttpResponse("No post request")
+        return HttpResponse("No POST request")
 
 def register(request):
     if request.method == "POST":
@@ -93,22 +105,6 @@ def index(request):
     noteform = NoteForm()
     all_records = app.main.main()
     
-    if request.method == "POST":
-           
-        form = NoteForm(request.POST)
-        if form.is_valid():
-            date = form.cleaned_data['date']
-            value = form.cleaned_data['value']
-            category = form.cleaned_data['category']
-            description = form.cleaned_data['description']
-            note = Journal(date=date, value=value, category=Categories.objects.get(category=category), description=description)
-            note.save()
-        
-            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':'Note saved.'})
-        else:
-            return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':'Wrong form input'})
-        
-    else: 
-        return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':''})
+    return render(request, "journal_add_note.html", {"all_records":app.main.main(), 'noteform':noteform, 'message':''})
 
 
