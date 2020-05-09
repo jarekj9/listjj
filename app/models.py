@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Categories(models.Model):
     login = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.CharField(max_length=100, unique=True)
+    category = models.CharField(max_length=100)
 
 
 class Journal(models.Model):

@@ -1,6 +1,6 @@
-{% extends 'journal_base.html' %}
+{% extends 'note_list.html' %}
 
-{% block content %}
+{% block add_note %}
 
   <h2>Add entry</h2>
   <form method="post" action="{% url 'addnote' %}">

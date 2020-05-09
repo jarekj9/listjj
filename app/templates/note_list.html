@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block page %}
+
+<div class="container">
+    {% block add_note %}
+    {% endblock %}
+</div>
+
+<div class="container">
+	<a href="{% url 'modify_categories' %}">Modify categories</a>
+</div>
+
+</br></br>
+
+<div class="divTable paleBlueRows">
+	<div class="divTableHeading">
+		<div class="divTableRow">
+			<div class="divTableHead">Date</div>
+			<div class="divTableHead">Value</div>
+			<div class="divTableHead">Category</div>
+			<div class="divTableHead">Description</div>
+			<div class="divTableHead">Action</div>
+		</div>
+	</div>
+
+	<div class="divTableBody">
+
+		{% for record in all_records %}
+			<div class="divTableRow">
+				<div class="divTableCell">{{ record.date }}</div>
+				<div class="divTableCell">{{ record.value }}</div>
+				<div class="divTableCell">{{ record.category }}</div>
+				<div class="divTableCell">{{ record.description }}</div>				
+				<div class="divTableCell">
+					<form method="post" action="{% url 'deletenote' %}">
+						{% csrf_token %}	
+						<input type="hidden" name="id" value="{{ record.id }}" />
+						<button type="submit">Delete</button>
+					</form>
+				</div>
+				
+				
+			</div>
+		{% endfor %}
+
+	</div>
+
+	<div class="divTableFoot tableFootStyle">
+		<div class="divTableRow">
+			<div class="divTableCell">Date</div>
+			<div class="divTableCell">Value</div>
+			<div class="divTableCell">Category</div>
+			<div class="divTableCell">Description</div>
+			<div class="divTableHead">Action</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

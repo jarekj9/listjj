@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Expenses Journal</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+
+<div>
+    <h1><a href="/">Journal Home</a></h1>
+</div>
+<div>
+You are logged in as: <b>{{ login }}</b>, 
+<a href="{% url 'logout' %}">Logout</a>
+</div>
+
+
+<div>
+    {{ message }}
+</div>
+
+
+<div class="container">
+    {% block page %}
+    {% endblock %}
+</div>
+
+
+</body>
+</html>
+
+

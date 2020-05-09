@@ -2,18 +2,14 @@
 from .models import *
 from django.contrib.auth.models import User
 
-def main():
+def main(login):
 
     output=[]
     if not Categories.objects.filter(category='other').count():
         record = Categories(category='other', login=User.objects.get(username='jarek'))
-        record.save()
-        
-    #record = Journal(login='Jarek', value=100, category=Categories.objects.get(category='inne'), description='Test')
-    #record.save()
+        record.save()   
     
-    
-    all_records = Journal.objects.all()
+    all_records = Journal.objects.filter(login=login)
     for item in all_records:
         output.append({'id':item.id,
                        'login':item.login.username,  #related object
