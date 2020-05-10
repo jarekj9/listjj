@@ -20,7 +20,7 @@ urlpatterns = [
     path("delete_category", app.views.delete_category, name="delete_category"),
     path("admin/", admin.site.urls),
 	path("register/", app.views.register, name="register"),
-    path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'),name='logout'),
+    path("accounts/logout/", app.views.register, name="register"),
 ]
 
 urlpatterns += [

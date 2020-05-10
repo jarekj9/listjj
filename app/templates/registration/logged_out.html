@@ -1,6 +1,16 @@
-{% extends "base.html" %}
+{% extends "registration/base.html" %}
 
 {% block content %}
   <p>Logged out!</p>  
-  <a href="{% url 'login'%}">Click here to login again.</a>
+
+<div>
+
+   {% if user.is_authenticated %}
+     User: {{ user.get_username }}
+     <a href="{% url 'logout'%}?next={{request.path}}">Logout</a> 
+   {% else %}
+     <a href="{% url 'login'%}?next={{request.path}}"> Login Here, if you already have approved account</a>
+   {% endif %} 
+</div>
+
 {% endblock %}

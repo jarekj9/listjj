@@ -2,14 +2,11 @@
 from .models import *
 from django.contrib.auth.models import User
 
-def main(login):
-
+def show_notes(login, startdate, stopdate):
+    '''Returns list of dicts with notes for specific user'''
     output=[]
-    if not Categories.objects.filter(category='other').count():
-        record = Categories(category='other', login=User.objects.get(username='jarek'))
-        record.save()   
-    
-    all_records = Journal.objects.filter(login=login)
+
+    all_records = Journal.objects.filter(login=login,date__range=(startdate,stopdate)).order_by('date')
     for item in all_records:
         output.append({'id':item.id,
                        'login':item.login.username,  #related object
@@ -20,11 +17,14 @@ def main(login):
     
     return output
     
+def page_summary(notes):
+    '''Counts summary for specific notes from def "show_notes" '''
+    valuesum = sum([item.get('value') for item in notes])
 
-if __name__ == '__main__':
-    
-    main()
-  
+    return valuesum
+
+
+
 
 
 

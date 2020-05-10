@@ -46,6 +46,13 @@ class NoteForm(forms.Form):
     category = CategoryModelChoiceField(required=True, widget=forms.Select, queryset = None)   #queryset for category is set in constructor
     description = forms.CharField(max_length=100)
 
+class FilterNotesForm(forms.Form):
+    def initial_start_date():
+        return datetime.date.today() - datetime.timedelta(days=30)
+
+    startdate = forms.DateField(label=u'From ',initial=initial_start_date)
+    stopdate = forms.DateField(label=u'To ',initial=datetime.date.today)
+
 def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)   			#can use simpler: UserCreationForm
@@ -99,7 +106,7 @@ def deletenote(request):
 @login_required
 @user_passes_test(is_member)
 def add_category(request):
-    form = CategoryForm(request.POST)
+    form = CategoryForm(request.POST or None)
     if request.method == "POST":     
         if form.is_valid():
             category = form.cleaned_data['category']
@@ -126,13 +133,27 @@ def delete_category(request):
     
 @login_required
 @user_passes_test(is_member)
-def index(request):
-    noteform = NoteForm(login=request.user)
-    all_records = app.main.main(login=request.user)
+def index(request,
+          startdate = datetime.date.today() - datetime.timedelta(days=30),
+          stopdate = datetime.date.today()):
+
+    note_form = NoteForm(login=request.user)
+    filter_notes_form = FilterNotesForm(request.POST or None)
+
+    if request.method == "POST":   #filtering dates
+        if filter_notes_form.is_valid():
+            startdate = filter_notes_form.cleaned_data['startdate']
+            stopdate = filter_notes_form.cleaned_data['stopdate']
+        else:
+            return HttpResponse("Wrong user input")
+
     
-    return render(request, 'add_note.html', {'all_records':app.main.main(login=request.user),
-                                             'noteform':noteform, 
-                                             'message':'',
-                                             'login':request.user})
+    all_records = app.main.show_notes(request.user, startdate, stopdate)
+    return render(request, 'add_note.html', {'all_records': all_records,
+                                             'summary': app.main.page_summary(all_records),
+                                             'noteform': note_form,
+                                             'filterform': filter_notes_form, 
+                                             'message': '',
+                                             'login': request.user})
 
 

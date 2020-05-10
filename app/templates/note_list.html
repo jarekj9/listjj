@@ -12,6 +12,13 @@
 </div>
 
 </br></br>
+<div>
+  <form method="post" action="{% url 'index' %}">
+      {% csrf_token %}
+	  {{ filterform }}
+      <button type="submit">Filter</button>
+  </form>
+</div>
 
 <div class="divTable paleBlueRows">
 	<div class="divTableHeading">
@@ -46,15 +53,26 @@
 
 	</div>
 
-	<div class="divTableFoot tableFootStyle">
+	<div class="divTableHeading">
 		<div class="divTableRow">
-			<div class="divTableCell">Date</div>
-			<div class="divTableCell">Value</div>
-			<div class="divTableCell">Category</div>
-			<div class="divTableCell">Description</div>
+			<div class="divTableHead">Date</div>
+			<div class="divTableHead">Value</div>
+			<div class="divTableHead">Category</div>
+			<div class="divTableHead">Description</div>
 			<div class="divTableHead">Action</div>
 		</div>
 	</div>
 </div>
+
+</br></br>
+<div class="divTable paleBlueRows">
+	<div class="divTableFoot tableFootStyle">
+		<div class="divTableRow">
+			<div class="divTableCell">Sum:</div>
+			<div class="divTableCell">{{ summary }}</div>
+		</div>			
+	</div>
+</div>
+
 
 {% endblock %}
