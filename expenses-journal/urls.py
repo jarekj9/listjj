@@ -17,6 +17,7 @@ urlpatterns = [
     path("deletenote", app.views.deletenote, name="deletenote"),
     path("addnote", app.views.addnote, name="addnote"),
     path("modify_categories", app.views.add_category, name="modify_categories"),
+    path("export", app.views.export_view, name="export"),
     path("delete_category", app.views.delete_category, name="delete_category"),
     path("admin/", admin.site.urls),
 	path("register/", app.views.register, name="register"),
