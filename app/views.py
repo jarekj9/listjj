@@ -161,7 +161,7 @@ def import_view(request):
             for row in lines:
                 rowtab = row.split(',')
                 if not Categories.objects.filter(category = rowtab[4]).exists():
-                    missing_category = Categories(category = rowtab[4])
+                    missing_category = Categories(login=request.user, category = rowtab[4])
                     missing_category.save()
 
                 note = Journal(login = request.user, 
