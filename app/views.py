@@ -150,20 +150,25 @@ def export_view(request):
 @login_required
 @user_passes_test(is_member)
 def import_view(request):
+    '''Takes uploaded csv file and adds its data to database. Also adds missing categories.'''
     if request.method == 'POST':
         importform = ImportForm(request.POST, request.FILES)
         if importform.is_valid():
-            file = request.FILES['file']            
+            file = request.FILES['file']      
             data = file.read().decode("utf-8")          
             lines = data.split("\n")[:-1]
 
             for row in lines:
                 rowtab = row.split(',')
-                note = Journal(login=request.user, 
-                               date=rowtab[2], 
-                               value=rowtab[3], 
-                               category=Categories.objects.get(category=rowtab[4]), 
-                               description=rowtab[5])
+                if not Category.objects.filter(category = rowtab[4]).exists():
+                    missing_category = Category(category = rowtab[4])
+                    missing_category.save()
+
+                note = Journal(login = request.user, 
+                               date = rowtab[2],
+                               value = rowtab[3],
+                               category = Categories.objects.get(category = rowtab[4]),
+                               description = rowtab[5])
                 note.save()
 
             return redirect('/')
