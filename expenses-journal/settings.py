@@ -121,3 +121,7 @@ django_heroku.settings(locals())
 
 #I add this for auth/login:
 LOGIN_REDIRECT_URL = '/'
+
+#I add this or file uploads:
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

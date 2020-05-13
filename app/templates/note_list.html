@@ -8,7 +8,16 @@
 </div>
 
 <div class="container"><a href="{% url 'modify_categories' %}">Modify categories</a></div>
-<div class="container"> <a href="{% url 'export' %}">Export data</a></div>
+<div class="container"> <a href="{% url 'export' %}">Export (all data) to csv</a></div>
+</br>
+
+<div>
+  <form method="post" action="{% url 'import' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+	  {{ import_form }}
+	  <input type ="submit" value="Send" />
+  </form>
+</div>
 
 </br></br>
 <div>

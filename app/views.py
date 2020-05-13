@@ -11,7 +11,7 @@ from django import forms
 
 import app.main
 import datetime
-
+import csv
 
 #filter only users, that are members of group
 def is_member(user):
@@ -58,6 +58,12 @@ class FilterNotesForm(forms.Form):
     startdate = forms.DateField(label=u'From ',initial=initial_start_date)
     stopdate = forms.DateField(label=u'To ',initial=datetime.date.today)
     category = CategoryModelChoiceField(required=True, widget=forms.Select, queryset = None)
+
+class ImportForm(forms.Form):
+    file = forms.FileField(
+        label='Import from csv',
+        help_text=''
+    )
 
 def register(request):
     if request.method == "POST":
@@ -140,7 +146,30 @@ def delete_category(request):
 @user_passes_test(is_member)
 def export_view(request):
     return app.main.export_data(request.user)
-    
+
+@login_required
+@user_passes_test(is_member)
+def import_view(request):
+    if request.method == 'POST':
+        importform = ImportForm(request.POST, request.FILES)
+        if importform.is_valid():
+            file = request.FILES['file']            
+            data = file.read().decode("utf-8")          
+            lines = data.split("\n")[:-1]
+
+            for row in lines:
+                rowtab = row.split(',')
+                note = Journal(login=request.user, 
+                               date=rowtab[2], 
+                               value=rowtab[3], 
+                               category=Categories.objects.get(category=rowtab[4]), 
+                               description=rowtab[5])
+                note.save()
+
+            return redirect('/')
+    else:
+        return HttpResponse('No POST')
+ 
 @login_required
 @user_passes_test(is_member)
 def index(request,
@@ -151,6 +180,7 @@ def index(request,
 
     note_form = NoteForm(login=request.user)
     filter_notes_form = FilterNotesForm(request.POST or None,login=request.user)
+    import_form = ImportForm()
 
     if request.method == "POST":   #filtering dates
         if filter_notes_form.is_valid():
@@ -165,7 +195,8 @@ def index(request,
     return render(request, 'add_note.html', {'all_records': all_records,
                                              'summary': app.main.page_summary(all_records),
                                              'noteform': note_form,
-                                             'filterform': filter_notes_form, 
+                                             'filterform': filter_notes_form,
+                                             'import_form':import_form, 
                                              'message': '',
                                              'login': request.user})
 

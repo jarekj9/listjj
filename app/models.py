@@ -13,4 +13,10 @@ class Journal(models.Model):
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     description = models.CharField(max_length=1000)
 
+def get_upload_path(instance, filename):
+    return 'import/{0}/{1}'.format(instance.user.username, filename)
+
+class ImportModel(models.Model):
+    file = models.FileField(upload_to='import/')
+
 

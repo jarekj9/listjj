@@ -1,0 +1,37 @@
+
+										
+Renifer full xpath:
+
+/html/body/div[2]/div/div/div/span
+
+
+
+Re\nifer sekacja:
+
+<div class="mc-notification zIndex--fixed"><div class="mc-background--shade iGrid mc-notification-inner space--h-3 space--t-3 bRad--a bRad--b-r mc-notification-inner--peek"><div class="link width--all-12 space--b-4" data-handler="replace" data-replace="{&quot;endpoint&quot;:&quot;https://www.pepper.pl/mascotcards/claim&quot;,&quot;replaces&quot;:[&quot;.mc-notification&quot;],&quot;method&quot;:&quot;post&quot;,&quot;params&quot;:{&quot;key&quot;:&quot;mascotcards-0824a713f8e8bfcbcfe852329f98b9ae&quot;}}"><div class="iGrid-item width--all-12 width--fromW3-7"><span class="btn mc-btn--primary text--upper width--all-12">
+						Łap Ognistego Renifera!
+					</span></div></div><img class="mc-notification-character--peek box--all-i" src="https://www.pepper.pl/assets/img/mascotcards/peek_caa62.svg" width="180" alt="peek"><button class="mc-notification-close" title="Zamknij" type="button" data-handler="remove" data-remove="{&quot;target&quot;:&quot;.mc-notification&quot;,&quot;className&quot;:&quot;fade&quot;}"><span class="btn btn--mode-dark btn--circle"><svg width="16px" height="16px" class="icon icon--cross"><use xlink:href="/assets/img/ico_a30a0.svg#cross"></use></svg></span></button></div></div>
+					
+					
+Renifer sekcja:
+					
+					<div class="link width--all-12 space--b-4" data-handler="replace" data-replace="{&quot;endpoint&quot;:&quot;https://www.pepper.pl/mascotcards/claim&quot;,&quot;replaces&quot;:[&quot;.mc-notification&quot;],&quot;method&quot;:&quot;post&quot;,&quot;params&quot;:{&quot;key&quot;:&quot;mascotcards-0824a713f8e8bfcbcfe852329f98b9ae&quot;}}"><div class="iGrid-item width--all-12 width--fromW3-7"><span class="btn mc-btn--primary text--upper width--all-12">
+						Łap Ognistego Renifera!
+					</span></div></div>
+
+
+
+krzyzyk close full xpath
+
+/html/body/div[2]/div/button/span
+
+
+krzyzyk:
+
+<span class="btn btn--mode-dark btn--circle"><svg width="16px" height="16px" class="icon icon--cross"><use xlink:href="/assets/img/ico_a30a0.svg#cross"></use></svg></span>
+
+cale:
+
+
+<div class="mc-notification zIndex--fixed"><div class="mc-notification-inner mc-notification-inner--reveal mc-background--primary hAlign--all-c hAlign--fromW3-l iGrid space--h-3 space--t-3 bRad--a bRad--b-r"><div class="width--all-12 width--fromW3-7 hAlign--all-c space--t-4 space--h-1 space--fromW2-h-4 text--color-white"><span class="mc-festiveFont size--all-xxxl">Gratulacje!</span><p class="size--all-l">Złapałeś Ognistego Renifera Dekoracyjnego - odmiana biała</p></div><div class="box--all-b space--t-3 space--fromW3-t-0"><img class="mc-notification-character--win mc-notification-effect--tada" width="180" src="https://www.pepper.pl/assets/img/mascotcards/deer/ornamental-level1_1d424.svg" alt="-1"></div><div class="width--all-12 width--fromW3-7 hAlign--all-c space--t-3"><div class="box--all-b mc-notification-btn"><a href="https://www.pepper.pl/flamedeer/collection" class="btn btn--mode-boxSec mc-notification-shadow space--h-4 width--all-12">Sprawdź swoją kolekcję</a></div></div><button class="mc-notification-close" title="Zamknij" type="button" data-handler="remove" data-remove="{&quot;target&quot;:&quot;.mc-notification&quot;,&quot;className&quot;:&quot;fade&quot;}"><span class="btn btn--mode-dark btn--circle"><svg width="16px" height="16px" class="icon icon--cross"><use xlink:href="/assets/img/ico_a30a0.svg#cross"></use></svg></span></button></div></div>
+
