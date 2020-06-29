@@ -1,7 +1,7 @@
 div.paleBlueRows {
   font-family: "Times New Roman", Times, serif;
   border: 1px solid #FFFFFF;
-  width: 650px;
+  width: 800px;
   height: 200px;
   text-align: center;
   border-collapse: collapse;
@@ -10,6 +10,7 @@ div.paleBlueRows {
   border: 1px solid #FFFFFF;
   padding: 3px 2px;
 }
+
 .divTable.paleBlueRows .divTableBody .divTableCell {
   font-size: 13px;
 }
@@ -31,6 +32,9 @@ div.paleBlueRows {
   border-left: none;
 }
 
+.paleBlueRows .tableFootStyle .divTableCell {
+padding: 20px 20px 20px 20px;
+}
 .paleBlueRows .tableFootStyle {
   font-size: 14px;
   font-weight: bold;
@@ -38,9 +42,7 @@ div.paleBlueRows {
   background: #D0E4F5;
   border-top: 3px solid #444444;
 }
-.paleBlueRows .tableFootStyle {
-  font-size: 14px;
-}
+
 /* DivTable.com */
 .divTable{ display: table; }
 .divTableRow { display: table-row; }

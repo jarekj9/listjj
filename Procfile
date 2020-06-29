@@ -1,1 +1,1 @@
-web: gunicorn expenses-journal.wsgi --log-file -
+web: gunicorn listjj.wsgi --log-file -

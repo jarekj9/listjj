@@ -2,7 +2,7 @@
   "name": "App",
   "description": "App",
   "image": "heroku/python",
-  "repository": "https://github.com/heroku/expenses-journal",
+  "repository": "https://github.com/heroku/listjj",
   "keywords": ["python3", "django" ],
   "addons": [ "heroku-postgresql" ],
   "env": {

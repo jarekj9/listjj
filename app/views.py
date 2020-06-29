@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from .models import *
 #for auth:
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -57,7 +57,7 @@ class FilterNotesForm(forms.Form):
 
     startdate = forms.DateField(label=u'From ',initial=initial_start_date)
     stopdate = forms.DateField(label=u'To ',initial=datetime.date.today)
-    category = CategoryModelChoiceField(required=True, widget=forms.Select, queryset = None)
+    category = CategoryModelChoiceField(required=False,empty_label='all', widget=forms.Select, queryset = None)
 
 class ImportForm(forms.Form):
     file = forms.FileField(
@@ -111,7 +111,25 @@ def deletenote(request):
     if request.method == "POST":
         id = request.POST.get('id')
         Journal.objects.filter(id=id).delete()
-        return redirect("/")
+
+        #return redirect("/")
+        
+        filter=str(request.POST.get('category'))
+        return HttpResponse(filter)
+        '''
+        record_list = all_notes(request.user, filter)
+        note_form = NoteForm(login=request.user)
+        filter_notes_form = FilterNotesForm(request.POST or None,login=request.user)
+        import_form = ImportForm()
+        return render(request, 'add_note.html', {'all_records': record_list,
+                                                 'summary': page_summary(record_list),
+                                                 'noteform': note_form,
+                                                 'filterform': filter_notes_form,
+                                                 'filter': filter,
+                                                 'import_form':import_form, 
+                                                 'message': '',
+                                                 'login': request.user})
+        '''
     else:
         return HttpResponse("No POST request")
 
@@ -145,7 +163,21 @@ def delete_category(request):
 @login_required
 @user_passes_test(is_member)
 def export_view(request):
-    return app.main.export_data(request.user)
+    return export_data(request.user)
+
+def export_data(login):
+    
+    csv_response = HttpResponse(content_type='text/csv')
+    csv_response['Content-Disposition'] = 'attachment; filename="export.csv"'
+    all_records = Journal.objects.filter(login = login)
+    
+    for item in all_records:
+        one_row_tab = [item.id, item.login.username, item.date, item.value, 
+               item.category.category, item.description]
+        writer = csv.writer(csv_response)
+        writer.writerow(one_row_tab)
+
+    return csv_response
 
 @login_required
 @user_passes_test(is_member)
@@ -155,32 +187,66 @@ def import_view(request):
         importform = ImportForm(request.POST, request.FILES)
         if importform.is_valid():
             file = request.FILES['file']      
-            data = file.read().decode("utf-8")          
+            
+            try:
+                data = file.read().decode("utf-8")  
+            except UnicodeDecodeError:
+                return HttpResponse('Cannot decode this file, is this a valid csv ?')
             lines = data.split("\n")[:-1]
+            
+            try:
+                for row in lines:
+                    rowtab = row.split(',')
+                    if not Categories.objects.filter(category = rowtab[4]).exists():
+                        missing_category = Categories(login=request.user, category = rowtab[4])
+                        missing_category.save()
 
-            for row in lines:
-                rowtab = row.split(',')
-                if not Categories.objects.filter(category = rowtab[4]).exists():
-                    missing_category = Categories(login=request.user, category = rowtab[4])
-                    missing_category.save()
-
-                note = Journal(login = request.user, 
-                               date = rowtab[2],
-                               value = rowtab[3],
-                               category = Categories.objects.get(category = rowtab[4]),
-                               description = rowtab[5])
-                note.save()
-
-            return redirect('/')
+                    note = Journal(login = request.user, 
+                                date = rowtab[2],
+                                value = rowtab[3],
+                                category = Categories.objects.get(category = rowtab[4]),
+                                description = rowtab[5])
+                    note.save()
+                #import pdb; pdb.set_trace()
+                return redirect('/')
+            except IndexError:
+                return HttpResponse('The file has errors, each line needs to have 6 comma-separated fields')
+        else:
+            return HttpResponse('Invalid file')
     else:
-        return HttpResponse('No POST')
- 
+        return HttpResponse('No POST request')
+
+
+def all_notes(login, filter):
+    '''Returns list of dicts with notes for specific user'''
+    output=[]
+
+    if not filter['category'][0]: filter['category'] = Categories.objects.all()
+
+    all_records = Journal.objects.filter(login = login,
+                                         date__range = (filter['startdate'],filter['stopdate']),
+                                         category__in = filter['category']).order_by('date')
+    for item in all_records:
+        output.append({'id':item.id,
+                       'login':item.login.username,  #related object
+                       'date':item.date.strftime("%d-%m-%Y"),
+                       'value':item.value,
+                       'category':item.category.category,  #related object
+                       'description':item.description})
+    
+    return output
+
+def page_summary(notes):
+    '''Counts summary for specific notes from def "show_notes" '''
+    valuesum = sum([item.get('value') for item in notes])
+    return valuesum
+
 @login_required
 @user_passes_test(is_member)
 def index(request,
           filter={'startdate': datetime.date.today() - datetime.timedelta(days=30),
                   'stopdate': datetime.date.today(),
-                  'category': None}
+                  'category': [None]}
          ):
 
     note_form = NoteForm(login=request.user)
@@ -196,11 +262,12 @@ def index(request,
             return HttpResponse("Wrong user input")
 
     
-    all_records = app.main.show_notes(request.user, filter)
-    return render(request, 'add_note.html', {'all_records': all_records,
-                                             'summary': app.main.page_summary(all_records),
+    record_list = all_notes(request.user, filter)
+    return render(request, 'add_note.html', {'all_records': record_list,
+                                             'summary': page_summary(record_list),
                                              'noteform': note_form,
                                              'filterform': filter_notes_form,
+                                             'filter': filter,
                                              'import_form':import_form, 
                                              'message': '',
                                              'login': request.user})
