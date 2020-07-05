@@ -32,7 +32,7 @@ div.paleBlueRows {
 }
 
 .paleBlueRows .tableFootStyle {
-  font-size: 14px;
+  font-size: 24px;
   font-weight: bold;
   color: #333333;
   background: #D0E4F5;
@@ -54,3 +54,6 @@ div.paleBlueRows {
 .input-number {
   width: 5%;
   }
+div{
+  font-size: 30;
+}
