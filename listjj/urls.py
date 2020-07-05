@@ -23,7 +23,7 @@ urlpatterns = [
     path('api/', include('listjj.apiurls')),
     path("admin/", admin.site.urls),
 	path("register/", app.views.register, name="register"),
-    path("accounts/logout/", app.views.register, name="register"),
+    path("accounts/logout/", app.views.register, name="login"),
 ]
 
 urlpatterns += [
