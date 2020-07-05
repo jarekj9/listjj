@@ -20,6 +20,7 @@ urlpatterns = [
     path("export", app.views.export_view, name="export"),
     path("import", app.views.import_view, name="import"),
     path("delete_category", app.views.delete_category, name="delete_category"),
+    path('api/', include('listjj.apiurls')),
     path("admin/", admin.site.urls),
 	path("register/", app.views.register, name="register"),
     path("accounts/logout/", app.views.register, name="register"),

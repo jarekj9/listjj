@@ -37,7 +37,6 @@
 				<div class="divTableCell">{{ record.category }}</div>
 				<div class="divTableCell" style="text-align: left;">{{ record.description }}</div>				
 				<div class="divTableCell">
-					{{ filter.category }}
 					<form method="post" action="{% url 'deletenote' %}">
 						{% csrf_token %}	
 						<input type="hidden" name="id" value="{{ record.id }}" />
@@ -51,29 +50,10 @@
 		{% endfor %}
 	</div>
 
-	<div class="divTableHeading">
-		<div class="divTableRow">
-			<div class="divTableHead">Date</div>
-			<div class="divTableHead">Value</div>
-			<div class="divTableHead">Category</div>
-			<div class="divTableHead">Description</div>
-			<div class="divTableHead">Action</div>
-		</div>
-	</div>
 </div>
 
-<!-- ################################ SUMMARY  -->
-</br></br>
-<div class="divTable paleBlueRows">
-	<div class="divTableFoot tableFootStyle">
-		<div class="divTableRow">
-			<div class="divTableCell">Sum:</div>
-			<div class="divTableCell">{{ summary }}</div>
-		</div>			
-	</div>
-</div>
-</br></br>
 
+</br></br></br>
 <!-- ################################ OPTIONS  -->
 <div class="divTable paleBlueRows" style="width: 500px; text-align:left;">
 	<div class="divTableHeading">

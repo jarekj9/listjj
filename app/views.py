@@ -8,6 +8,9 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from django.forms.widgets import NumberInput, TextInput
+from .serializers import JournalSerializer
+from rest_framework import viewsets
 
 import app.main
 import datetime
@@ -36,18 +39,22 @@ class CategoryModelChoiceField(forms.ModelChoiceField):  #to display specific la
          return obj.category
 
 class NoteForm(forms.Form):
-    def __init__(self, *args, **kwargs):   #I need to access 'request.user' via constructor during object creation
+    def __init__(self, *args, **kwargs):   # I need to access 'request.user' via constructor during object creation
         login = kwargs.pop('login')
         super(NoteForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Categories.objects.filter(login=login)
+        self.fields['value'] = forms.IntegerField(initial=0)
 
-    date = forms.DateField(initial=datetime.date.today)
-    value = forms.FloatField() 
-    category = CategoryModelChoiceField(required=True, widget=forms.Select, queryset = None)   #queryset for category is set in constructor
-    description = forms.CharField(max_length=100)
+    class Meta:         # because date variable is ignored in the Form (it is set in addnote method)
+        model = Journal
+        exclude = ["date"]
+
+    value = forms.FloatField(widget=NumberInput()) 
+    category = CategoryModelChoiceField(required=True, widget=forms.Select, queryset = None, initial=0)   #queryset for category is set in constructor
+    description = forms.CharField(max_length=100, widget=TextInput(attrs={'size': '20'}))
 
 class FilterNotesForm(forms.Form):
-    def __init__(self, *args, **kwargs):   #I need to access 'request.user' via constructor during object creation
+    def __init__(self, *args, **kwargs):   # I need to access 'request.user' via constructor during object creation
         login = kwargs.pop('login')
         super(FilterNotesForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Categories.objects.filter(login=login)
@@ -93,7 +100,7 @@ def addnote(request):
     if request.method == "POST":     
         form = NoteForm(request.POST,login=request.user)
         if form.is_valid():
-            date = form.cleaned_data['date']
+            date = datetime.date.today()
             value = form.cleaned_data['value']
             categoryobj = form.cleaned_data['category']
             description = form.cleaned_data['description']
@@ -111,25 +118,7 @@ def deletenote(request):
     if request.method == "POST":
         id = request.POST.get('id')
         Journal.objects.filter(id=id).delete()
-
-        #return redirect("/")
-        
-        filter=str(request.POST.get('category'))
-        return HttpResponse(filter)
-        '''
-        record_list = all_notes(request.user, filter)
-        note_form = NoteForm(login=request.user)
-        filter_notes_form = FilterNotesForm(request.POST or None,login=request.user)
-        import_form = ImportForm()
-        return render(request, 'add_note.html', {'all_records': record_list,
-                                                 'summary': page_summary(record_list),
-                                                 'noteform': note_form,
-                                                 'filterform': filter_notes_form,
-                                                 'filter': filter,
-                                                 'import_form':import_form, 
-                                                 'message': '',
-                                                 'login': request.user})
-        '''
+        return redirect("/")
     else:
         return HttpResponse("No POST request")
 
@@ -240,6 +229,12 @@ def page_summary(notes):
     '''Counts summary for specific notes from def "show_notes" '''
     valuesum = sum([item.get('value') for item in notes])
     return valuesum
+
+
+class JournalViewSet(viewsets.ModelViewSet):
+    queryset = Journal.objects.all()
+    serializer_class = JournalSerializer
+
 
 @login_required
 @user_passes_test(is_member)

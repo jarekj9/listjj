@@ -4,8 +4,10 @@
 
   <h2>Add entry:</h2>
   <form method="post" action="{% url 'addnote' %}">
-      {% csrf_token %}
-	  {{ noteform }}
+    {% csrf_token %}
+	  <table>
+      {{ noteform.as_table }}
+    </table>
       <button type="submit">Save</button>
   </form>
 
