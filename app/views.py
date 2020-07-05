@@ -12,7 +12,6 @@ from django.forms.widgets import NumberInput, TextInput
 from .serializers import JournalSerializer
 from rest_framework import viewsets
 
-import app.main
 import datetime
 import csv
 
@@ -60,7 +59,7 @@ class FilterNotesForm(forms.Form):
         self.fields['category'].queryset = Categories.objects.filter(login=login)
 
     def initial_start_date():
-        return datetime.date.today() - datetime.timedelta(days=30)
+        return datetime.date.today() - datetime.timedelta(days=365)  # default timerange to show
 
     startdate = forms.DateField(label=u'From ',initial=initial_start_date)
     stopdate = forms.DateField(label=u'To ',initial=datetime.date.today)
