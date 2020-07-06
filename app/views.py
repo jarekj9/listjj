@@ -48,9 +48,9 @@ class NoteForm(forms.Form):
         model = Journal
         exclude = ["date"]
 
-    value = forms.FloatField(widget=NumberInput(attrs={'class': 'forms'})) 
+    value = forms.FloatField(widget=NumberInput()) 
     category = CategoryModelChoiceField(required=True, widget=forms.Select, queryset = None, initial=0)   #queryset for category is set in constructor
-    description = forms.CharField(max_length=100, widget=TextInput(attrs={'class': 'forms'}))
+    description = forms.CharField(max_length=100, widget=TextInput())
 
 class FilterNotesForm(forms.Form):
     def __init__(self, *args, **kwargs):   # I need to access 'request.user' via constructor during object creation
