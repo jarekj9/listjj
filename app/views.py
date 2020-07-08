@@ -8,9 +8,13 @@ from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+
 from django.forms.widgets import NumberInput, TextInput
+#api:
 from .serializers import JournalSerializer
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 import datetime
 import csv
@@ -231,6 +235,8 @@ def page_summary(notes):
 
 
 class JournalViewSet(viewsets.ModelViewSet):
+    '''For API'''
+    permission_classes = (IsAuthenticated,)  # without it api is open
     queryset = Journal.objects.all()
     serializer_class = JournalSerializer
 
