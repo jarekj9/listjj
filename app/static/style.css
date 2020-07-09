@@ -1,18 +1,18 @@
 body {
-  font-size: 24px;
+  font-size: 18px;
 }
 
 input
 {
-    font-size:24px;
+    font-size:18px;
 }
 select
 {
-    font-size:24px;
+    font-size:18px;
 }
 button
 {
-    font-size:24px;
+    font-size:18px;
 }
 div.paleBlueRows {
   font-family: "Times New Roman", Times, serif;
@@ -28,7 +28,7 @@ div.paleBlueRows {
 }
 
 .divTable.paleBlueRows .divTableBody .divTableCell {
-  font-size: 24px;
+  font-size: 18px;
 }
 .divTable.paleBlueRows .divTableRow:nth-child(even) {
   background: #D0E4F5;
@@ -38,7 +38,7 @@ div.paleBlueRows {
   border-bottom: 5px solid #FFFFFF;
 }
 .divTable.paleBlueRows .divTableHeading .divTableHead {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   color: #FFFFFF;
   text-align: center;
@@ -52,7 +52,7 @@ div.paleBlueRows {
 padding: 20px 20px 20px 20px;
 }
 .paleBlueRows .tableFootStyle {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: bold;
   color: #333333;
   background: #D0E4F5;
