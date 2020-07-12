@@ -47,6 +47,11 @@ class NoteForm(forms.Form):
         super(NoteForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Categories.objects.filter(login=login)
         self.fields['value'] = forms.IntegerField(initial=0)
+        try:
+            default_category = Categories.objects.get(login=login, id=login.profile.default_category.id)
+        except AttributeError:  # profile.default_category does not exist yet
+            default_category = (0,0)
+        self.fields['category'].initial =  default_category
 
     class Meta:         # because date variable is ignored in the Form (it is set in addnote method)
         model = Journal
@@ -58,23 +63,28 @@ class NoteForm(forms.Form):
 
 class FilterNotesForm(forms.Form):
     def __init__(self, *args, **kwargs):   # I need to access 'request.user' via constructor during object creation
-        login = kwargs.pop('login')
+        self.login = kwargs.pop('login')   # login is request.user
         super(FilterNotesForm, self).__init__(*args, **kwargs)
-        self.fields['category'].queryset = Categories.objects.filter(login=login)
+        self.fields['category'].queryset = Categories.objects.filter(login=self.login)
+        try:
+            default_category = Categories.objects.get(login=self.login, id=self.login.profile.default_category.id)
+        except AttributeError:  # profile.default_category does not exist yet
+            default_category = (0,0)
+        self.fields['category'].initial =  default_category
 
     def initial_start_date():
         return datetime.date.today() - datetime.timedelta(days=365)  # default timerange to show
 
     startdate = forms.DateField(label=u'From ',initial=initial_start_date)
     stopdate = forms.DateField(label=u'To ',initial=datetime.date.today)
-    category = CategoryModelChoiceField(required=False,empty_label='all', widget=forms.Select, queryset = None)
+    category = CategoryModelChoiceField(required=False, widget=forms.Select, empty_label='all', queryset = None) # queryset is None because i have it in init
 
 class ImportForm(forms.Form):
     file = forms.FileField(
         label='Import from csv',
         help_text=''
     )
-
+##################################################################################################################
 def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)   			#can use simpler: UserCreationForm
@@ -138,19 +148,41 @@ def add_category(request):
         else:
             return HttpResponse("Wrong user input")
     else:
-        return render(request, "modify_categories.html", {'categoryform':form,
-                                                          'categories':Categories.objects.filter(login=request.user).values_list('id','category'),
-                                                          'login':request.user })
+        return render(request, "modify_categories.html", {'categoryform': form,
+                                                          'categories': Categories.objects.filter(login=request.user).values_list('id','category'),
+                                                          'login': request.user, 
+                                                          })
 
 @login_required
 @user_passes_test(is_member)
 def delete_category(request):
     if request.method == "POST":
-        Categories.objects.filter(id=request.POST.get('category_id'), login=request.user).delete()
+        user = User.objects.get(id=request.user.id)
+        user.profile.default_category = None
+        user.save()
+        id = request.POST.get('category_id')
+        Categories.objects.filter(id=id, login=request.user).delete()
         return redirect("/modify_categories")
-
     else:
         return HttpResponse("No POST request")
+
+@login_required
+@user_passes_test(is_member)
+def set_default_category(request):
+    '''To set default category in user.profile - for category filter and adding notes'''
+    user = User.objects.get(id=request.user.id)
+    if request.method == "POST":
+        id=request.POST.get('category_id')
+        if id == 'remove_default':
+            user.profile.default_category = None
+            user.save()
+            return redirect("/modify_categories")
+
+        user.profile.default_category = Categories.objects.get(id=id, login=request.user)
+        user.save()
+        return redirect("/modify_categories")
+
+    return HttpResponse('No POST request')
 
 @login_required
 @user_passes_test(is_member)
@@ -213,7 +245,9 @@ def all_notes(login, filter):
     '''Returns list of dicts with notes for specific user'''
     output=[]
 
-    if not filter['category'][0]: filter['category'] = Categories.objects.all()
+    if filter['category'] == [None]:
+            filter['category'] = Categories.objects.all()
+
 
     all_records = Journal.objects.filter(login = login,
                                          date__range = (filter['startdate'],filter['stopdate']),
@@ -248,6 +282,11 @@ def index(request,
                   'stopdate': datetime.date.today(),
                   'category': [None]}
          ):
+
+    if request.user.profile.default_category:
+        default_category = Categories.objects.get(login=request.user.id, id=request.user.profile.default_category.id)
+        filter.update({'category': [default_category,]})
+
 
     note_form = NoteForm(login=request.user)
     filter_notes_form = FilterNotesForm(request.POST or None,login=request.user)

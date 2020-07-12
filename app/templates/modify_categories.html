@@ -16,36 +16,60 @@
 	<div class="divTableHeading">
 		<div class="divTableRow">
 			<div class="divTableHead">Category</div>
-			<div class="divTableHead">Action</div>
+			<div class="divTableHead">Delete</div>
+			<div class="divTableHead">Set Default</div>
 		</div>
 	</div>
 
 	<div class="divTableBody">
 
-		{% for record in categories %}
+		{% for category in categories %}   <!--  Table with categories-->
 			<div class="divTableRow">
-				<div class="divTableCell">{{ record.1 }}</div>
-		
+
+				<div class="divTableCell">				
+					{% if category.0 == login.profile.default_category.id %}
+					<font style='color: blue; font-weight: bold'>DEFAULT</br></font>
+					{% endif %}
+					{{ category.1 }}
+				</div>
+				
 				<div class="divTableCell">
 					<form method="post" action="{% url 'delete_category' %}">
 						{% csrf_token %}	
-						<input type="hidden" name="category_id" value="{{ record.0 }}" />
+						<input type="hidden" name="category_id" value="{{ category.0 }}" />
 						<button type="submit">Delete</button>
 					</form>
 				</div>
-				
-				
+
+				<div class="divTableCell">
+					<form method="post" action="{% url 'set_default_category' %}">
+						{% csrf_token %}	
+						<input type="hidden" name="category_id" value="{{ category.0 }}" />
+						<button type="submit">Set Default</button>
+					</form>
+				</div>
+					
 			</div>
 		{% endfor %}
 
+			<div class="divTableRow">		 <!--  Works as footer -->
+				<div class="divTableCell">	
+				</div>
+				<div class="divTableCell">
+				</div>
+				<div class="divTableCell">
+					<form method="post" action="{% url 'set_default_category' %}">
+						{% csrf_token %}	
+						<input type="hidden" name="category_id" value="remove_default"/>
+						<button type="submit">Remove Default</button>
+					</form>
+				</div>	
+			</div>
+
+
+
 	</div>
 
-	<div class="divTableFoot tableFootStyle">
-		<div class="divTableRow">
-			<div class="divTableCell">Date</div>
-			<div class="divTableHead">Action</div>
-		</div>
-	</div>
 </div>
 
 
