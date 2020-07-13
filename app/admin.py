@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Categories, Journal
+from .models import *
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 # Register your models here.
 
@@ -21,3 +22,4 @@ class CategoriesAdmin(admin.ModelAdmin):
 
 admin.site.register(Categories, CategoriesAdmin)
 '''
+
