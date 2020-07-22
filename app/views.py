@@ -46,7 +46,7 @@ class NoteForm(forms.Form):
         login = kwargs.pop('login')
         super(NoteForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Categories.objects.filter(login=login)
-        self.fields['value'] = forms.IntegerField(initial=0)
+        self.fields['value'] = forms.FloatField(initial=0)
         try:
             default_category = Categories.objects.get(login=login, id=login.profile.default_category.id)
         except AttributeError:  # profile.default_category does not exist yet
@@ -81,8 +81,8 @@ class FilterNotesForm(forms.Form):
 
 class ImportForm(forms.Form):
     file = forms.FileField(
-        label='Import from csv',
-        help_text=''
+        label='Choose file to import from csv ',
+        help_text='',
     )
 ##################################################################################################################
 def register(request):
