@@ -1,91 +1,28 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse
 from .models import *
+from .forms import *
 #for auth:
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth import login
 #for registration:
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django import forms
 
-from django.forms.widgets import NumberInput, TextInput
 #api:
 from .serializers import JournalSerializer
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 
 import datetime
 import csv
 
 #filter only users, that are members of group
 def is_member(user):
+    '''Test user membership to authorize the access'''
     return user.groups.filter(name='accessGroup').exists()
 
-#better form, can use instead of UserCreationForm
-class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-    first_name = forms.CharField(required=True, max_length=50)
-    last_name = forms.CharField(required=True, max_length=50)
-
-    #Meta inspects the current model of the class User, then ensures that 6 of the fields inside of it are there
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
-
-class CategoryForm(forms.Form):
-    category = forms.CharField(max_length=100)
-
-class CategoryModelChoiceField(forms.ModelChoiceField):  #to display specific label in ChoiceField
-    def label_from_instance(self, obj):
-         return obj.category
-
-class NoteForm(forms.Form):
-    def __init__(self, *args, **kwargs):   # I need to access 'request.user' via constructor during object creation
-        login = kwargs.pop('login')
-        super(NoteForm, self).__init__(*args, **kwargs)
-        self.fields['category'].queryset = Categories.objects.filter(login=login)
-        self.fields['value'] = forms.FloatField(initial=0)
-        try:
-            default_category = Categories.objects.get(login=login, id=login.profile.default_category.id)
-        except AttributeError:  # profile.default_category does not exist yet
-            default_category = (0,0)
-        self.fields['category'].initial =  default_category
-
-    class Meta:         # because date variable is ignored in the Form (it is set in addnote method)
-        model = Journal
-        exclude = ["date"]
-
-    value = forms.FloatField(widget=NumberInput()) 
-    category = CategoryModelChoiceField(required=True, widget=forms.Select, queryset = None, initial=0)   #queryset for category is set in constructor
-    description = forms.CharField(max_length=100, widget=TextInput())
-
-class FilterNotesForm(forms.Form):
-    def __init__(self, *args, **kwargs):   # I need to access 'request.user' via constructor during object creation
-        self.login = kwargs.pop('login')   # login is request.user
-        super(FilterNotesForm, self).__init__(*args, **kwargs)
-        self.fields['category'].queryset = Categories.objects.filter(login=self.login)
-        try:
-            default_category = Categories.objects.get(login=self.login, id=self.login.profile.default_category.id)
-        except AttributeError:  # profile.default_category does not exist yet
-            default_category = (0,0)
-        self.fields['category'].initial =  default_category
-
-    def initial_start_date():
-        return datetime.date.today() - datetime.timedelta(days=365)  # default timerange to show
-
-    startdate = forms.DateField(label=u'From ',initial=initial_start_date)
-    stopdate = forms.DateField(label=u'To ',initial=datetime.date.today)
-    category = CategoryModelChoiceField(required=False, widget=forms.Select, empty_label='all', queryset = None) # queryset is None because i have it in init
-
-class ImportForm(forms.Form):
-    file = forms.FileField(
-        label='Choose file to import from csv ',
-        help_text='',
-    )
-##################################################################################################################
 def register(request):
+    '''View to Register new user'''
     if request.method == "POST":
         form = UserRegisterForm(request.POST)   			#can use simpler: UserCreationForm
         if form.is_valid():
@@ -109,7 +46,8 @@ def register(request):
 
 @login_required
 @user_passes_test(is_member)
-def addnote(request):   
+def addnote(request):
+    '''Add note/post for a user'''
     if request.method == "POST":     
         form = NoteForm(request.POST,login=request.user)
         if form.is_valid():
@@ -128,6 +66,7 @@ def addnote(request):
 @login_required
 @user_passes_test(is_member)
 def deletenote(request):
+    '''Delete users note'''
     if request.method == "POST":
         id = request.POST.get('id')
         Journal.objects.filter(id=id).delete()
@@ -137,7 +76,8 @@ def deletenote(request):
 
 @login_required
 @user_passes_test(is_member)
-def add_category(request):
+def add_category_view(request):
+    '''Add new category for a user'''
     form = CategoryForm(request.POST or None)
     if request.method == "POST":     
         if form.is_valid():
@@ -150,21 +90,48 @@ def add_category(request):
     else:
         return render(request, "modify_categories.html", {'categoryform': form,
                                                           'categories': Categories.objects.filter(login=request.user).values_list('id','category'),
-                                                          'login': request.user, 
+                                                          'login': request.user,
                                                           })
 
 @login_required
 @user_passes_test(is_member)
 def delete_category(request):
+    '''Will delete category, which belongs to user'''
     if request.method == "POST":
         user = User.objects.get(id=request.user.id)
         user.profile.default_category = None
         user.save()
-        id = request.POST.get('category_id')
-        Categories.objects.filter(id=id, login=request.user).delete()
+        category_id = request.POST.get('category_id')
+        Categories.objects.filter(id=category_id, login=request.user).delete()
         return redirect("/modify_categories")
     else:
         return HttpResponse("No POST request")
+
+@login_required
+@user_passes_test(is_member)
+def edit_category_view(request, category_id=None):
+    '''View to edit category, which belongs to user'''
+    
+    form = CategoryForm(request.POST or None)
+    
+    if request.method == "POST" and form.is_valid():
+        user = User.objects.get(id=request.user.id)
+        new_category_name = form.cleaned_data['category']
+        category_id = request.POST.get('category_id')
+        edited_category = Categories.objects.get(id=category_id, login=request.user)
+        edited_category.category = new_category_name
+        edited_category.save()
+        return redirect("/modify_categories")
+
+    old_category_name = Categories.objects.get(id=category_id, login=request.user).category
+    form.fields['category'].initial = old_category_name
+    return render(request, "modify_categories.html", {'categoryform': form,
+                                                      'categories': Categories.objects.filter(login=request.user).values_list('id','category'),
+                                                      'login': request.user,
+                                                      'old_category_name': old_category_name,
+                                                      'category_id': category_id,
+                                                     })
+
 
 @login_required
 @user_passes_test(is_member)
@@ -186,14 +153,11 @@ def set_default_category(request):
 
 @login_required
 @user_passes_test(is_member)
-def export_view(request):
-    return export_data(request.user)
-
-def export_data(login):
-    
+def export_notes(request):
+    '''Returns csv file for download, with all user notes'''
     csv_response = HttpResponse(content_type='text/csv')
     csv_response['Content-Disposition'] = 'attachment; filename="export.csv"'
-    all_records = Journal.objects.filter(login = login)
+    all_records = Journal.objects.filter(login = request.user)
     
     for item in all_records:
         one_row_tab = [item.id, item.login.username, item.date, item.value, 
@@ -205,7 +169,7 @@ def export_data(login):
 
 @login_required
 @user_passes_test(is_member)
-def import_view(request):
+def import_notes(request):
     '''Takes uploaded csv file and adds its data to database. Also adds missing categories.'''
     if request.method == 'POST':
         importform = ImportForm(request.POST, request.FILES)
@@ -231,7 +195,6 @@ def import_view(request):
                                 category = Categories.objects.get(category = rowtab[4]),
                                 description = rowtab[5])
                     note.save()
-                #import pdb; pdb.set_trace()
                 return redirect('/')
             except IndexError:
                 return HttpResponse('The file has errors, each line needs to have 6 comma-separated fields')
@@ -241,7 +204,7 @@ def import_view(request):
         return HttpResponse('No POST request')
 
 
-def all_notes(login, filter):
+def get_all_notes(login, filter):
     '''Returns list of dicts with notes for specific user'''
     output=[]
 
@@ -269,7 +232,7 @@ def page_summary(notes):
 
 
 class JournalViewSet(viewsets.ModelViewSet):
-    '''For API'''
+    '''Api access'''
     permission_classes = (IsAuthenticated,)  # without it api is open
     queryset = Journal.objects.all()
     serializer_class = JournalSerializer
@@ -282,26 +245,42 @@ def index(request,
                   'stopdate': datetime.date.today(),
                   'category': [None]}
          ):
+    '''View with the main page'''
 
-    if request.user.profile.default_category:
+    if request.user.profile.default_category: # change filter category to user default if user has it
         default_category = Categories.objects.get(login=request.user.id, id=request.user.profile.default_category.id)
         filter.update({'category': [default_category,]})
 
+    if request.session.get('category') not in [[None], None]:  # change filter to last choices from cookies, if it exist
+        category_id = Categories.objects.get(id=request.session['category'])
+        filter.update({'category': [category_id],
+                       'startdate': request.session.get('startdate'),
+                       'stopdate': request.session.get('stopdate')})
 
     note_form = NoteForm(login=request.user)
-    filter_notes_form = FilterNotesForm(request.POST or None,login=request.user)
+    filter_notes_form = FilterNotesForm(request.POST or None,
+                                        login=request.user,
+                                        filter=filter, 
+                                        initial = {'category': filter['category'][0],
+                                                   'startdate': filter['startdate'],
+                                                   'stopdate': filter['stopdate']})
     import_form = ImportForm()
 
-    if request.method == "POST":   #filtering dates
+    if request.method == "POST":   
         if filter_notes_form.is_valid():
-            filter = {'startdate': filter_notes_form.cleaned_data['startdate'],
-                      'stopdate': filter_notes_form.cleaned_data['stopdate'],
-                      'category': [filter_notes_form.cleaned_data['category']]}
+            filter = {'startdate': str(filter_notes_form.cleaned_data['startdate']),  # filtering dates
+                      'stopdate': str(filter_notes_form.cleaned_data['stopdate']),
+                      'category': [filter_notes_form.cleaned_data['category']] }
+            
+            request.session.update(filter)  # save to cookies: last form start/stop dates ad category if exists ( i want it to persist)
+            if filter_notes_form.cleaned_data.get('category'):
+                request.session.update({'category': filter_notes_form.cleaned_data.get('category').id})
+     
         else:
             return HttpResponse("Wrong user input")
 
     
-    record_list = all_notes(request.user, filter)
+    record_list = get_all_notes(request.user, filter)
     return render(request, 'add_note.html', {'all_records': record_list,
                                              'summary': page_summary(record_list),
                                              'noteform': note_form,
