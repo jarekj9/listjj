@@ -95,8 +95,7 @@ def edit_note_view(request, note_id=None):
             return redirect("/")
 
     filter = set_filter(request)
-    filter_notes_form = FilterNotesForm(request.POST or None,
-                                        login=request.user,
+    filter_notes_form = FilterNotesForm(login=request.user,
                                         filter=filter, 
                                         initial = {'category': filter['category'][0],
                                                    'startdate': filter['startdate'],
