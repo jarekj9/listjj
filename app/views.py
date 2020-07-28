@@ -76,6 +76,55 @@ def deletenote(request):
 
 @login_required
 @user_passes_test(is_member)
+def edit_note_view(request, note_id=None):
+    '''Edit note/post for a user'''
+
+    note_form = NoteForm(request.POST or None, login=request.user)
+    if request.method == "POST":
+        if note_form.is_valid():
+            user = User.objects.get(id=request.user.id)
+            note_id = request.POST.get('note_id')
+            new_value = note_form.cleaned_data['value']
+            new_category_id = note_form.cleaned_data['category']
+            new_description = note_form.cleaned_data['description']
+            edited_note = Journal.objects.get(id=note_id, login=request.user)
+            edited_note.value = new_value
+            edited_note.category = new_category_id
+            edited_note.description = new_description
+            edited_note.save()
+            return redirect("/")
+
+    filter = set_filter(request)
+    filter_notes_form = FilterNotesForm(request.POST or None,
+                                        login=request.user,
+                                        filter=filter, 
+                                        initial = {'category': filter['category'][0],
+                                                   'startdate': filter['startdate'],
+                                                   'stopdate': filter['stopdate']})
+    import_form = ImportForm()
+
+    try:
+        edited_note = Journal.objects.get(id=note_id, login=request.user)
+    except Journal.DoesNotExist :
+        return HttpResponse("You do not have such note.")
+    
+    note_form.fields['value'].initial = edited_note.value
+    note_form.fields['category'].initial = edited_note.category
+    note_form.fields['description'].initial = edited_note.description
+
+    record_list = get_all_notes(request.user, filter)
+    return render(request, 'add_note.html', {'all_records': record_list,
+                                             'summary': page_summary(record_list),
+                                             'noteform': note_form,
+                                             'filterform': filter_notes_form,
+                                             'filter': filter,
+                                             'import_form':import_form, 
+                                             'message': '',
+                                             'login': request.user,
+                                             'edited_note': edited_note})
+
+@login_required
+@user_passes_test(is_member)
 def add_category_view(request):
     '''Add new category for a user'''
     form = CategoryForm(request.POST or None)
@@ -110,7 +159,7 @@ def delete_category(request):
 @login_required
 @user_passes_test(is_member)
 def edit_category_view(request, category_id=None):
-    '''View to edit category, which belongs to user'''
+    '''View to edit category name, which belongs to user'''
     
     form = CategoryForm(request.POST or None)
     
@@ -123,7 +172,10 @@ def edit_category_view(request, category_id=None):
         edited_category.save()
         return redirect("/modify_categories")
 
-    old_category_name = Categories.objects.get(id=category_id, login=request.user).category
+    try: 
+        old_category_name = Categories.objects.get(id=category_id, login=request.user).category
+    except Categories.DoesNotExist :
+        return HttpResponse("You do not have such category")
     form.fields['category'].initial = old_category_name
     return render(request, "modify_categories.html", {'categoryform': form,
                                                       'categories': Categories.objects.filter(login=request.user).values_list('id','category'),
@@ -237,15 +289,11 @@ class JournalViewSet(viewsets.ModelViewSet):
     queryset = Journal.objects.all()
     serializer_class = JournalSerializer
 
-
-@login_required
-@user_passes_test(is_member)
-def index(request,
-          filter={'startdate': datetime.date.today() - datetime.timedelta(days=30),
-                  'stopdate': datetime.date.today(),
-                  'category': [None]}
-         ):
-    '''View with the main page'''
+def set_filter(request):
+    '''Set filter with default category and dates, to display notes'''
+    filter={'startdate': datetime.date.today() - datetime.timedelta(days=30),
+            'stopdate': datetime.date.today(),
+            'category': [None]}
 
     if request.user.profile.default_category: # change filter category to user default if user has it
         default_category = Categories.objects.get(login=request.user.id, id=request.user.profile.default_category.id)
@@ -256,7 +304,13 @@ def index(request,
         filter.update({'category': [category_id],
                        'startdate': request.session.get('startdate'),
                        'stopdate': request.session.get('stopdate')})
+    return filter
 
+@login_required
+@user_passes_test(is_member)
+def index(request):
+    '''View with the main page'''
+    filter = set_filter(request)
     note_form = NoteForm(login=request.user)
     filter_notes_form = FilterNotesForm(request.POST or None,
                                         login=request.user,

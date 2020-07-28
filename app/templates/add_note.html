@@ -2,13 +2,33 @@
 
 {% block add_note %}
 
-  <h2>Add entry:</h2>
-  <form method="post" action="{% url 'addnote' %}">
-    {% csrf_token %}
-	  <table>
-      {{ noteform.as_table }}
-    </table>
-      <button class="btn btn-info" type="submit">Save</button>
-  </form>
+{% if edited_note is None %}
+
+    <h2>Add entry:</h2>
+    <form method="post" action="{% url 'addnote' %}">
+      {% csrf_token %}
+      <table>
+        {{ noteform.as_table }}
+      </table>
+        <button class="btn btn-info" type="submit">Save</button>
+    </form>
+
+{% else %}
+    <!-- This form will appear only if note is edited-->
+    <div class="container">
+      <div class="jumbotron">
+        <h2>Edit entry:</h2>
+        <form method="post" action="{% url 'edit_note' %}">
+          {% csrf_token %}
+          <table>
+            {{ noteform.as_table }}
+          </table>
+            <input type="hidden" name="note_id" value="{{ edited_note.id }}" />
+            <button class="btn btn-info" type="submit">Save</button>
+        </form>
+      </div>
+    <div>
+
+{% endif %}
 
 {% endblock %}

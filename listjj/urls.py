@@ -16,6 +16,8 @@ urlpatterns = [
     path("", app.views.index, name="index"),
     path("deletenote", app.views.deletenote, name="deletenote"),
     path("addnote", app.views.addnote, name="addnote"),
+    path("edit_note", app.views.edit_note_view, name="edit_note"),
+    re_path("edit_note/(?P<note_id>[^/]*)/?", app.views.edit_note_view),
     path("modify_categories", app.views.add_category_view, name="modify_categories"),
     path("delete_category", app.views.delete_category, name="delete_category"),
     path("edit_category", app.views.edit_category_view, name="edit_category"),
@@ -26,7 +28,7 @@ urlpatterns = [
     path('api/', include('listjj.apiurls')),
     path("admin/", admin.site.urls),
 	path("register/", app.views.register, name="register"),
-    path("accounts/logout/", app.views.register, name="login"),
+
 ]
 
 urlpatterns += [

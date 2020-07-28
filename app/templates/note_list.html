@@ -26,23 +26,29 @@
 		<td>Category</td>
 		<td>Description</td>
 		<td>Action</td>
+		<td></td>
 	</tr>
 
-	{% for record in all_records %}
+	{% for note in all_records %}
 	<tr>
-			<td>{{ record.date }}</td>
-			<td>{{ record.value }}</td>
-			<td>{{ record.category }}</td>
-			<td>{{ record.description }}</td>				
+			<td>{{ note.date }}</td>
+			<td>{{ note.value }}</td>
+			<td>{{ note.category }}</td>
+			<td>{{ note.description }}</td>				
 			<td>
 				<form method="post" action="{% url 'deletenote' %}">
 					{% csrf_token %}	
-					<input type="hidden" name="id" value="{{ record.id }}" />
+					<input type="hidden" name="id" value="{{ note.id }}" />
 					<input type="hidden" name="startdate" value="{{ filter.startdate }}" />
 					<input type="hidden" name="stopdate" value="{{ filter.stopdate }}" />
 					<input type="hidden" name="category" value="{{ filter.category }}" />
 					<button class="btn btn-danger" type="submit">Delete</button>
 				</form>
+			</td>
+			<td>
+				<button class="btn btn-info" type="button">
+					<a href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
+				</button>
 			</td>			
 	</tr>
 	{% endfor %} 
