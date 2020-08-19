@@ -298,8 +298,11 @@ def set_filter(request):
         default_category = Categories.objects.get(login=request.user.id, id=request.user.profile.default_category.id)
         filter.update({'category': [default_category,]})
 
+    if str(request.session.get('setdate')) < str(datetime.date.today()):  # if filter was not set today - dont read any further
+        return filter
+
     if request.session.get('category') not in [[None], None]:  # change filter to last choices from cookies, if it exist
-        category_id = Categories.objects.get(id=request.session['category'])
+        category_id = Categories.objects.get(id=request.session['category'][0])
         filter.update({'category': [category_id],
                        'startdate': request.session.get('startdate'),
                        'stopdate': request.session.get('stopdate')})
@@ -321,14 +324,14 @@ def index(request):
 
     if request.method == "POST":   
         if filter_notes_form.is_valid():
+            category_obj = filter_notes_form.cleaned_data['category']
+            category_id = None if not category_obj else category_obj.id
             filter = {'startdate': str(filter_notes_form.cleaned_data['startdate']),  # filtering dates
                       'stopdate': str(filter_notes_form.cleaned_data['stopdate']),
-                      'category': [filter_notes_form.cleaned_data['category']] }
+                      'category': [category_id],  # it is always [None] or [int]
+                      'setdate': str(datetime.date.today())}  #for cookies expiration only
             
-            request.session.update(filter)  # save to cookies: last form start/stop dates ad category if exists ( i want it to persist)
-            if filter_notes_form.cleaned_data.get('category'):
-                request.session.update({'category': filter_notes_form.cleaned_data.get('category').id})
-     
+            request.session.update(filter)  # save to cookies: last form start/stop dates and category.id
         else:
             return HttpResponse("Wrong user input")
 
