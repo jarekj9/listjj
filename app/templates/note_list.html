@@ -9,11 +9,20 @@
 
 <h2>Show journal:</h2>
 <!-- ################################ FILTER  -->
+<script>
+//auto submits filter form
+$(document).ready(function(){  
+    $(".auto-submit").change(function() {
+        $(this).closest("form").submit();
+    });
+});
+</script>
 <div>
   <form method="post" action="{% url 'index' %}">
-      {% csrf_token %}
-	  {{ filterform }}
-      <button class="btn btn-info" type="submit">Filter</button>
+	<div class="auto-submit">
+		{% csrf_token %}
+		{{ filterform }}
+	</div>
   </form>
 </div>
 

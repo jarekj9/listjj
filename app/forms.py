@@ -64,7 +64,10 @@ class FilterNotesForm(forms.Form):
 
     startdate = forms.DateField(label=u'From ',initial=None)
     stopdate = forms.DateField(label=u'To ',initial=None)
-    category = CategoryModelChoiceField(required=False, widget=forms.Select, empty_label='all', queryset=None) # queryset is None because i have it in init
+    category = CategoryModelChoiceField(required=False, 
+                                        widget=forms.Select(attrs={'onChange': 'refresh()'}), 
+                                        empty_label='all', 
+                                        queryset=None) # queryset is None because i have it in init
 
 class ImportForm(forms.Form):
     file = forms.FileField(
