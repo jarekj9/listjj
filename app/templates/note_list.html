@@ -28,9 +28,9 @@ $( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
   <form method="post" action="{% url 'index' %}">
 	<div class="auto-submit">
 		{% csrf_token %}
-		{{ filterform.startdate }}
-		{{ filterform.stopdate }}
-		{{ filterform.category }}
+		{{ filterform.startdate.label }}: {{ filterform.startdate }}
+		{{ filterform.stopdate.label }}: {{ filterform.stopdate }}
+		{{ filterform.category.label }}: {{ filterform.category }}
 	</div>
   </form>
 </div>
