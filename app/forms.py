@@ -64,9 +64,9 @@ class FilterNotesForm(forms.Form):
 
 
     startdate = forms.DateField(label=u'From ',initial=None, widget=forms.DateInput(
-                                                                 attrs={'id': 'datepicker1'}))
+                                                                 attrs={'id': 'datepicker1', 'style': 'width:100px'}))
     stopdate = forms.DateField(label=u'To ',initial=None, widget=forms.DateInput(
-                                                                 attrs={'id': 'datepicker2'}))
+                                                                 attrs={'id': 'datepicker2', 'style': 'width:100px'}))
     category = CategoryModelChoiceField(required=False, 
                                         widget=forms.Select(attrs={'onChange': 'refresh()'}), 
                                         empty_label='all', 
