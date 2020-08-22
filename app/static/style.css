@@ -69,3 +69,7 @@ padding: 20px 20px 20px 20px;
 .divTableBody { display: table-row-group;}
 
 
+.datepicker {
+  background-color: #000000 ;
+  color: #333 ;
+  }

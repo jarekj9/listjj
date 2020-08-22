@@ -9,10 +9,8 @@ from django.forms.widgets import NumberInput, TextInput
 
 import datetime
 
-
-
-#better form, can use instead of UserCreationForm
 class UserRegisterForm(UserCreationForm):
+    '''Better form to use instead of UserCreationForm'''
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=True, max_length=50)
     last_name = forms.CharField(required=True, max_length=50)
@@ -30,6 +28,7 @@ class CategoryModelChoiceField(forms.ModelChoiceField):  #to display specific la
          return obj.category
 
 class NoteForm(forms.Form):
+    '''Form for adding new note'''
     def __init__(self, *args, **kwargs):   # I need to access 'request.user' via constructor during object creation
         login = kwargs.pop('login')
         super(NoteForm, self).__init__(*args, **kwargs)
@@ -51,6 +50,7 @@ class NoteForm(forms.Form):
     description = forms.CharField(max_length=100, widget=TextInput())
 
 class FilterNotesForm(forms.Form):
+    '''Form allows to filter notes on the main page'''
     def __init__(self, *args, **kwargs):   # I need to access 'request.user' via constructor during object creation
         self.login = kwargs.pop('login')   # login is request.user
         self.filter = kwargs.pop('filter') 
@@ -62,8 +62,11 @@ class FilterNotesForm(forms.Form):
         except AttributeError:  # profile.default_category does not exist yet
             default_category = (0,0)
 
-    startdate = forms.DateField(label=u'From ',initial=None)
-    stopdate = forms.DateField(label=u'To ',initial=None)
+
+    startdate = forms.DateField(label=u'From ',initial=None, widget=forms.DateInput(
+                                                                 attrs={'id': 'datepicker1'}))
+    stopdate = forms.DateField(label=u'To ',initial=None, widget=forms.DateInput(
+                                                                 attrs={'id': 'datepicker2'}))
     category = CategoryModelChoiceField(required=False, 
                                         widget=forms.Select(attrs={'onChange': 'refresh()'}), 
                                         empty_label='all', 

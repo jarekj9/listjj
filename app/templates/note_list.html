@@ -16,12 +16,21 @@ $(document).ready(function(){
         $(this).closest("form").submit();
     });
 });
+
+//date picker widget
+$( function() {
+$( "#datepicker1" ).datepicker({dateFormat: 'yy-mm-dd'});
+$( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
+} );
 </script>
+
 <div>
   <form method="post" action="{% url 'index' %}">
 	<div class="auto-submit">
 		{% csrf_token %}
-		{{ filterform }}
+		{{ filterform.startdate }}
+		{{ filterform.stopdate }}
+		{{ filterform.category }}
 	</div>
   </form>
 </div>
