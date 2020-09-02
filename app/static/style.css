@@ -1,5 +1,5 @@
 body {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 input
@@ -14,6 +14,7 @@ button
 {
     font-size:18px;
 }
+
 div.paleBlueRows {
   font-family: "Times New Roman", Times, serif;
   border: 1px solid #FFFFFF;
@@ -69,3 +70,7 @@ padding: 20px 20px 20px 20px;
 .divTableBody { display: table-row-group;}
 
 
+.datepicker {
+  background-color: #000000 ;
+  color: #333 ;
+  }

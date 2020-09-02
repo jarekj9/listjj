@@ -151,6 +151,7 @@ def delete_category(request):
         user.save()
         category_id = request.POST.get('category_id')
         Categories.objects.filter(id=category_id, login=request.user).delete()
+        request.session.update({'category': [None]})  # reset category in cookies to avoid any errors
         return redirect("/modify_categories")
     else:
         return HttpResponse("No POST request")
@@ -290,7 +291,7 @@ class JournalViewSet(viewsets.ModelViewSet):
 
 def set_filter(request):
     '''Set filter with default category and dates, to display notes'''
-    filter={'startdate': datetime.date.today() - datetime.timedelta(days=30),
+    filter={'startdate': datetime.date.today() - datetime.timedelta(days=365),
             'stopdate': datetime.date.today(),
             'category': [None]}
 
