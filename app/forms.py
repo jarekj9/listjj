@@ -67,7 +67,8 @@ class FilterNotesForm(forms.Form):
                                                                  attrs={'id': 'datepicker1', 'style': 'width:100px'}))
     stopdate = forms.DateField(label=u'To ',initial=None, widget=forms.DateInput(
                                                                  attrs={'id': 'datepicker2', 'style': 'width:100px'}))
-    category = CategoryModelChoiceField(required=False, 
+    category = CategoryModelChoiceField(label='Category ',
+                                        required=False, 
                                         widget=forms.Select(attrs={'onChange': 'refresh()'}), 
                                         empty_label='all', 
                                         queryset=None) # queryset is None because i have it in init

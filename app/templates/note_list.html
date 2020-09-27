@@ -6,31 +6,17 @@
     {% block add_note %}
     {% endblock %}
 </div>
+</br>
 
-<h2>Show journal:</h2>
 <!-- ################################ FILTER  -->
-<script>
-//auto submits filter form
-$(document).ready(function(){  
-    $(".auto-submit").change(function() {
-        $(this).closest("form").submit();
-    });
-});
-
-//date picker widget
-$( function() {
-$( "#datepicker1" ).datepicker({dateFormat: 'yy-mm-dd'});
-$( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
-} );
-</script>
-
+<nav class="navbar navbar-light bg-light"><h5>List filter from - to, category:</h5></nav>
 <div>
   <form method="post" action="{% url 'index' %}">
 	<div class="auto-submit">
 		{% csrf_token %}
-		{{ filterform.startdate.label }}: {{ filterform.startdate }}
-		{{ filterform.stopdate.label }}: {{ filterform.stopdate }}
-		{{ filterform.category.label }}: {{ filterform.category }}
+		{{ filterform.startdate }} - 
+		{{ filterform.stopdate }},  
+		{{ filterform.category }}
 	</div>
   </form>
 </div>
@@ -67,9 +53,9 @@ $( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
 					<input type="hidden" name="startdate" value="{{ filter.startdate }}" />
 					<input type="hidden" name="stopdate" value="{{ filter.stopdate }}" />
 					<input type="hidden" name="category" value="{{ filter.category }}" />
-					<button class="btn btn-danger" type="submit">Delete</button>
+					<button class="btn btn-danger btn-sm" type="submit">Delete</button>
 				</br>
-					<a class="btn btn-info" href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
+					<a class="btn btn-info btn-sm" href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
 				</form>
 			</td>			
 	</tr>
@@ -87,12 +73,12 @@ $( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
 	</tr>
 </table>
 
-</br></br>
+</br></br>	
 
 <!-- ################################ OPTIONS  -->
 <table class='table-borderless'>
 	<tr>
-		<td><h1>Options:</h1></td>
+		<nav class="navbar navbar-light bg-light"><h5>Options:</h5></nav>
 	</tr>
 	<tr>
 		<td><a href="{% url 'modify_categories' %}">Modify categories</a></td>
@@ -108,23 +94,37 @@ $( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
 
 
 <form method="post" action="{% url 'import' %}" enctype="multipart/form-data"></td>
-{% csrf_token %}
-{{ form.non_field_errors }}
-{% for hidden_field in form.hidden_fields %}
-	{{ hidden_field.errors }}
-	{{ hidden_field }}
-{% endfor %}
+	{% csrf_token %}
+	{{ form.non_field_errors }}
+	{% for hidden_field in form.hidden_fields %}
+		{{ hidden_field.errors }}
+		{{ hidden_field }}
+	{% endfor %}
 
-</br>
+	</br>
 
-
-<div>		
-	{{ import_form }}
-
-	<input class="btn btn-default" type ="submit" value="Send">
-</div>
-
+	<div>		
+		{{ import_form }}
+		<input class="btn btn-default" type ="submit" value="Send">
+	</div>
 </form>
+
+
+
+<script>
+//auto submits filter form
+$(document).ready(function(){  
+    $(".auto-submit").change(function() {
+        $(this).closest("form").submit();
+    });
+});
+
+//date picker widget
+$( function() {
+$( "#datepicker1" ).datepicker({dateFormat: 'yy-mm-dd'});
+$( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
+} );
+</script>
 
 
 {% endblock %}

@@ -3,8 +3,8 @@
 {% block add_note %}
 
 {% if edited_note is None %}
-
-    <h2>Add entry:</h2>
+    </br>
+    <nav class="navbar navbar-light bg-light"><h5>Add Entry:</h5></nav>
     <form method="post" action="{% url 'addnote' %}">
       {% csrf_token %}
       <table>
@@ -17,7 +17,7 @@
     <!-- This form will appear only if note is edited-->
     <div class="container">
       <div class="jumbotron">
-        <h2>Edit entry:</h2>
+        <h5>Edit entry:</h5>
         <form method="post" action="{% url 'edit_note' %}">
           {% csrf_token %}
           <table>
