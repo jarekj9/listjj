@@ -2,21 +2,20 @@
   
 {% block page %}
 
-
+</br>
 {% if old_category_name is None %}
-
-	<h2>Add category:</h2>
+	<nav class="navbar navbar-light bg-light"><h5>Add category:</h5></nav>
 	<form method="post" action="{% url 'modify_categories' %}">
 		{% csrf_token %}
 		{{ categoryform }}
 		<button type="submit">Save</button>
 	</form>
-
+</br>
 {% else %}
 
 	<!-- This form will appear only if category name is edited-->
 	<div class="container">
-		<h2>Change category name:</h2>
+		<nav class="navbar navbar-light bg-light"><h5>Change category name:</h5></nav>
 		<div class="jumbotron">
 			<form method="post" action="{% url 'edit_category' %}">
 				{% csrf_token %}
@@ -28,9 +27,8 @@
 	</div>
 
 {% endif %}
-
-
-<h2>Edit category:</h2>
+<nav class="navbar navbar-light bg-light"><h5>Edit category:</h5></nav>
+</br>
 <b>Deleting category will delete all logs with this category !</b>
 <table class='table table-hover table-responsive table-striped'>
 	<tr class="info">
