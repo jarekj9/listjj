@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from .models import *
 from .forms import *
 
@@ -80,8 +81,8 @@ def addnote(request):
 
 @login_required
 @user_passes_test(is_member)
-def deletenote(request):
-    """Delete users note"""
+def delete_note(request):
+    """Delete users note, NOT USED"""
     if request.method == "POST":
         id = request.POST.get("id")
         Journal.objects.filter(id=id).delete()
@@ -89,6 +90,19 @@ def deletenote(request):
     else:
         return HttpResponse("No POST request")
 
+
+@login_required
+@user_passes_test(is_member)
+def delete_note_ajax(request):
+    """Delete users note"""
+    if request.method == "POST":
+        id = request.POST.get("note_id")
+        delete_result = Journal.objects.filter(id=id).delete()
+        if delete_result[0]:
+            return JsonResponse({'deleted': True})
+        return JsonResponse({'deleted': False})
+    else:
+        return HttpResponse("No DELETE request")
 
 @login_required
 @user_passes_test(is_member)
