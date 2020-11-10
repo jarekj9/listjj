@@ -12,12 +12,12 @@
 <nav class="navbar navbar-light bg-light"><h5>List filter from - to, category:</h5></nav>
 <div>
   <form method="post" action="{% url 'index' %}">
-	<div class="auto-submit">
-		{% csrf_token %}
-		{{ filterform.startdate }} - 
-		{{ filterform.stopdate }},  
-		{{ filterform.category }}
-	</div>
+    <div class="auto-submit">
+        {% csrf_token %}
+        {{ filterform.startdate }} - 
+        {{ filterform.stopdate }},  
+        {{ filterform.category }}
+    </div>
   </form>
 </div>
 
@@ -29,94 +29,128 @@
   data-show-columns="true"
   class = "table small"
 >
-	<thead>
-	<tr class="tr-class-2">
-		<th>Date</th>
-		<th>Value</th>
-		<th>Category</th>
-		<th>Description</th>
-		<th>Action</th>
-	</tr>
-	</thead>
+    <thead>
+    <tr class="tr-class-2">
+        <th>Date</th>
+        <th>Value</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Action</th>
+    </tr>
+    </thead>
 
-	<tbody>
-	{% for note in all_records %}
-	<tr id="tr-id-2" class="tr-class-1" data-title="bootstrap table" data-object='{"key": "value"}'>
-			<td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.date }}</td>
-			<td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.value }}</td>
-			<td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.category }}</td>
-			<td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.description }}</td>				
-			<td id="td-id-2" class="td-class-1" data-title="bootstrap table">
-				<form method="post" action="{% url 'deletenote' %}">
-					{% csrf_token %}	
-					<input type="hidden" name="id" value="{{ note.id }}" />
-					<input type="hidden" name="startdate" value="{{ filter.startdate }}" />
-					<input type="hidden" name="stopdate" value="{{ filter.stopdate }}" />
-					<input type="hidden" name="category" value="{{ filter.category }}" />
-					<button class="btn btn-danger btn-sm" type="submit">Delete</button>
-				</br>
-					<a class="btn btn-info btn-sm" href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
-				</form>
-			</td>			
-	</tr>
-	{% endfor %} 
-	</tbody>
+    <tbody>
+    {% for note in all_records %}
+    <tr id="tr-id-2" class="tr-class-1" data-title="bootstrap table" data-object='{"key": "value"}'>
+            <td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.date }}</td>
+            <td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.value }}</td>
+            <td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.category }}</td>
+            <td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.description }}</td>                
+            <td id="td-id-2" class="td-class-1" data-title="bootstrap table">
+                <form method="post" action="{% url 'delete_note' %}">
+                    {% csrf_token %}    
+                    <input type="hidden" name="id" value="{{ note.id }}" />
+                    <input type="hidden" name="startdate" value="{{ filter.startdate }}" />
+                    <input type="hidden" name="stopdate" value="{{ filter.stopdate }}" />
+                    <input type="hidden" name="category" value="{{ filter.category }}" />
+                    <button class="btn btn-danger btn-sm deleteNoteButton" type="submit" value="{{ note.id }}">Delete</button>
+                </br>
+                    <a class="btn btn-info btn-sm" href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
+                </form>
+            </td>            
+    </tr>
+    {% endfor %} 
+    </tbody>
 </table>
 
 <!-- ################################ SUMMARY  -->
 </br></br>
 
 <table class='table'>
-	<tr>
-		<td>Sum:</td>
-		<td>{{ summary }}</td>		
-	</tr>
+    <tr>
+        <td>Sum:</td>
+        <td>{{ summary }}</td>        
+    </tr>
 </table>
 
-</br></br>	
+</br></br>    
 
 <!-- ################################ OPTIONS  -->
 <table class='table-borderless'>
-	<tr>
-		<nav class="navbar navbar-light bg-light"><h5>Options:</h5></nav>
-	</tr>
-	<tr>
-		<td><a href="{% url 'modify_categories' %}">Modify categories</a></td>
-	</tr>
-	<tr>	
-		<td><a href="{% url 'export' %}">Export (all data) to csv</a></td>
-	</tr>
-	<tr>
-		
-	</tr>
+    <tr>
+        <nav class="navbar navbar-light bg-light"><h5>Options:</h5></nav>
+    </tr>
+    <tr>
+        <td><a href="{% url 'modify_categories' %}">Modify categories</a></td>
+    </tr>
+    <tr>    
+        <td><a href="{% url 'export' %}">Export (all data) to csv</a></td>
+    </tr>
+    <tr>
+        
+    </tr>
 </table>
 
 
 
 <form method="post" action="{% url 'import' %}" enctype="multipart/form-data"></td>
-	{% csrf_token %}
-	{{ form.non_field_errors }}
-	{% for hidden_field in form.hidden_fields %}
-		{{ hidden_field.errors }}
-		{{ hidden_field }}
-	{% endfor %}
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for hidden_field in form.hidden_fields %}
+        {{ hidden_field.errors }}
+        {{ hidden_field }}
+    {% endfor %}
 
-	</br>
+    </br>
 
-	<div>		
-		{{ import_form }}
-		<input class="btn btn-default" type ="submit" value="Send">
-	</div>
+    <div>        
+        {{ import_form }}
+        <input class="btn btn-default" type ="submit" value="Send">
+    </div>
 </form>
 
 
 
 <script>
 //auto submits filter form
-$(document).ready(function(){  
+$(document).ready(function(){ 
     $(".auto-submit").change(function() {
         $(this).closest("form").submit();
     });
+});
+
+
+$(document).on('click', '.deleteNoteButton', function(e) {
+    e.preventDefault();  //just for now, later make type=button instead of submit
+    let noteId = $(this).val();
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    let parentTr = $(this).closest('tr');
+    $(this).html("Deleting....");
+
+    
+    $.ajax({ 
+        url: "{% url 'delete_note_ajax' %}", 
+        data: {'note_id': noteId},
+        headers: {'X-CSRFToken': csrftoken},
+        method: 'post', 
+        beforeSend: function() {
+            parentTr.animate({'backgroundColor':'#fb6c6c'}, 300);
+        },
+        success: function (data, response) {
+            if(data['deleted']) {
+                parentTr.slideUp(300,function() {
+					parentTr.remove();
+				});
+            }
+            else {
+                alert('Cannot delete');
+            }
+        }, 
+        error: function () {    
+            alert('Error'); 
+        }, 
+    }); 
+
 });
 
 //date picker widget
@@ -124,7 +158,12 @@ $( function() {
 $( "#datepicker1" ).datepicker({dateFormat: 'yy-mm-dd'});
 $( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
 } );
+
+
+
 </script>
+
+ 
 
 
 {% endblock %}
