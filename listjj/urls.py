@@ -14,7 +14,8 @@ from django.conf.urls import include
 
 urlpatterns = [
     path("", app.views.index, name="index"),
-    path("deletenote", app.views.deletenote, name="deletenote"),
+    path("delete_note", app.views.delete_note, name="delete_note"),
+    path("delete_note_ajax", app.views.delete_note_ajax, name="delete_note_ajax"),
     path("addnote", app.views.addnote, name="addnote"),
     path("edit_note", app.views.edit_note_view, name="edit_note"),
     re_path("edit_note/(?P<note_id>[^/]*)/?", app.views.edit_note_view),
