@@ -99,7 +99,10 @@ def delete_note_ajax(request):
         id = request.POST.get("note_id")
         delete_result = Journal.objects.filter(id=id).delete()
         if delete_result[0]:
-            return JsonResponse({'deleted': True})
+            filter = set_filter(request)
+            record_list = get_all_notes(request.user, filter)
+            value_sum = page_values_sum(record_list)
+            return JsonResponse({'deleted': True, 'value_sum': value_sum})
         return JsonResponse({'deleted': False})
     else:
         return HttpResponse("No DELETE request")
@@ -151,7 +154,7 @@ def edit_note_view(request, note_id=None):
         "add_note.html",
         {
             "all_records": record_list,
-            "summary": page_summary(record_list),
+            "summary": page_values_sum(record_list),
             "noteform": note_form,
             "filterform": filter_notes_form,
             "filter": filter,
@@ -309,9 +312,7 @@ def import_notes(request):
                 for row in lines:
                     rowtab = row.split(",")
                     if not Categories.objects.filter(category=rowtab[4]).exists():
-                        missing_category = Categories(
-                            login=request.user, category=rowtab[4]
-                        )
+                        missing_category = Categories(login=request.user, category=rowtab[4])
                         missing_category.save()
 
                     note = Journal(
@@ -360,15 +361,14 @@ def get_all_notes(login, filter):
     return output
 
 
-def page_summary(notes):
+def page_values_sum(notes):
     """Counts summary for specific notes from def "show_notes" """
-    valuesum = sum([item.get("value") for item in notes])
-    return valuesum
+    value_sum = sum([item.get("value") for item in notes])
+    return value_sum
 
 
 class JournalViewSet(viewsets.ModelViewSet):
     """Api access"""
-
     permission_classes = (IsAuthenticated,)  # without it api is open
     queryset = Journal.objects.all().select_related('category')
     serializer_class = JournalSerializer
@@ -382,37 +382,25 @@ def set_filter(request):
         "category": [None],
     }
 
-    if (
-        request.user.profile.default_category
-    ):  # change filter category to user default if user has it
+    if request.user.profile.default_category:  # change filter category to user default if user has it
         default_category = Categories.objects.get(
             login=request.user.id, id=request.user.profile.default_category.id
         )
-        filter.update(
-            {
-                "category": [
-                    default_category,
-                ]
-            }
-        )
+        filter.update({"category": [default_category,]})
 
-    if str(request.session.get("setdate")) < str(
-        datetime.date.today()
-    ):  # if filter was not set today - dont read any further
+    # if filter was NOT set today - dont read any further
+    if str(request.session.get("setdate")) < str(datetime.date.today()):
         return filter
 
-    if request.session.get("category") not in [
-        [None],
-        None,
-    ]:  # change filter to last choices from cookies, if it exist
+    # change filter to last choices from cookies, if it exist
+    if request.session.get("category") not in [[None], None,]:
         category_id = Categories.objects.get(id=request.session["category"][0])
         filter.update(
             {
                 "category": [category_id],
                 "startdate": request.session.get("startdate"),
                 "stopdate": request.session.get("stopdate"),
-            }
-        )
+            })
     return filter
 
 
@@ -459,7 +447,7 @@ def index(request):
         "add_note.html",
         {
             "all_records": record_list,
-            "summary": page_summary(record_list),
+            "summary": page_values_sum(record_list),
             "noteform": note_form,
             "filterform": filter_notes_form,
             "filter": filter,

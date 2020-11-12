@@ -70,7 +70,7 @@
 <table class='table'>
     <tr>
         <td>Sum:</td>
-        <td>{{ summary }}</td>        
+        <td id="value_sum">{{ summary }}</td>        
     </tr>
 </table>
 
@@ -139,6 +139,7 @@ $(document).on('click', '.deleteNoteButton', function(e) {
     const noteId = $(this).val();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const parentTr = $(this).closest('tr');
+    const valueSumTd = $('#value_sum');
     $(this).html("Deleting....");
 
     $.ajax({ 
@@ -154,6 +155,7 @@ $(document).on('click', '.deleteNoteButton', function(e) {
                 parentTr.fadeOut("slow", function() {
                     parentTr.remove();
                  });
+                valueSumTd.html(data['value_sum']);
             }
             else {
                 alert('Cannot delete, perhaps it was already deleted ?');
