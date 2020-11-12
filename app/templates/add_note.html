@@ -10,7 +10,7 @@
       <table>
         {{ noteform.as_table }}
       </table>
-        <button class="btn btn-info" type="submit">Save</button>
+        <button class="btn btn-outline-primary" type="submit">Save</button>
     </form>
 
 {% else %}
@@ -24,7 +24,7 @@
             {{ noteform.as_table }}
           </table>
             <input type="hidden" name="note_id" value="{{ edited_note.id }}" />
-            <button class="btn btn-info" type="submit">Save</button>
+            <button class="btn btn-outline-primary" type="submit">Save</button>
         </form>
       </div>
     <div>

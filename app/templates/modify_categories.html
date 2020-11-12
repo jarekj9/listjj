@@ -8,7 +8,7 @@
 	<form method="post" action="{% url 'modify_categories' %}">
 		{% csrf_token %}
 		{{ categoryform }}
-		<button type="submit">Save</button>
+		<button class="btn btn-outline-primary btn-sm" type="submit">Save</button>
 	</form>
 </br>
 {% else %}
@@ -21,7 +21,7 @@
 				{% csrf_token %}
 				{{ categoryform }}
 				<input type="hidden" name="category_id" value="{{ category_id }}" />
-				<button type="submit">Save new name</button>
+				<button class="btn btn-outline-primary btn-sm" type="submit">Save new name</button>
 			</form>
 		</div>
 	</div>
@@ -45,7 +45,7 @@
 
 			<td>				
 				{% if category.0 == login.profile.default_category.id %}
-				<span class="label label-primary">DEFAULT</span></br>
+				<span class="badge badge-secondary">DEFAULT</span></br>
 				{% endif %}
 				{{ category.1 }}
 			</td>
@@ -54,19 +54,19 @@
 				<form method="post" action="{% url 'delete_category' %}">
 					{% csrf_token %}	
 					<input type="hidden" name="category_id" value="{{ category.0 }}" />
-					<button class="btn btn-danger" type="submit">Delete</button>
+					<button class="btn btn-outline-danger" type="submit">Delete</button>
 				</form>
 			</td>
 
 			<td>
-				<a class="btn btn-info" href="{% url 'edit_category' %}/{{ category.0 }}">Edit name</a>
+				<a class="btn btn-outline-primary" href="{% url 'edit_category' %}/{{ category.0 }}">Edit name</a>
 			</td>
 
 			<td>
 				<form method="post" action="{% url 'set_default_category' %}">
 					{% csrf_token %}	
 					<input type="hidden" name="category_id" value="{{ category.0 }}" />
-					<button class="btn btn-info" type="submit">Set Default</button>
+					<button class="btn btn-outline-primary" type="submit">Set Default</button>
 				</form>
 			</td>
 				
@@ -81,7 +81,7 @@
 				<form method="post" action="{% url 'set_default_category' %}">
 					{% csrf_token %}	
 					<input type="hidden" name="category_id" value="remove_default"/>
-					<button class="btn btn-info" type="submit">Remove Default</button>
+					<button class="btn btn-outline-danger" type="submit">Remove Default</button>
 				</form>
 			</td>	
 		</tr>
