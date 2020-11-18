@@ -34,33 +34,30 @@ class CategoryForm(forms.Form):
     category = forms.CharField(max_length=100)
 
 
-class CategoryModelChoiceField(
-    forms.ModelChoiceField
-):  # to display specific label in ChoiceField
+class CategoryModelChoiceField(forms.ModelChoiceField):
+
     def label_from_instance(self, obj):
+        '''To display specific label in ChoiceField'''
         return obj.category
 
 
 class NoteForm(forms.Form):
     """Form for adding new note"""
 
-    def __init__(
-        self, *args, **kwargs
-    ):  # I need to access 'request.user' via constructor during object creation
+    def __init__(self, *args, **kwargs):  # I need to access 'request.user' via constructor during object creation
         login = kwargs.pop("login")
         super(NoteForm, self).__init__(*args, **kwargs)
+    
         self.fields["category"].queryset = Categories.objects.filter(login=login)
         self.fields["value"] = forms.FloatField(initial=0)
 
         try:
-            default_category = Categories.objects.get(
-                login=login, id=login.profile.default_category.id
-            )
+            default_category = Categories.objects.get(login=login, id=login.profile.default_category.id)
         except AttributeError:  # profile.default_category does not exist yet
             default_category = (0, 0)
         self.fields["category"].initial = default_category
 
-    class Meta:  # because date variable is ignored in the Form (it is set in addnote method)
+    class Meta:  # because date variable is ignored in the Form (it is set in AddNoteView method)
         model = Journal
         exclude = ["date"]
 

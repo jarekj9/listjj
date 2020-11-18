@@ -9,18 +9,19 @@
 </br>
 
 <!-- ################################ FILTER  -->
-<nav class="navbar navbar-light bg-light"><h5>List filter from - to, category:</h5></nav>
-<div>
-  <form method="post" action="{% url 'index' %}">
-    <div class="auto-submit">
-        {% csrf_token %}
-        {{ filterform.startdate }} - 
-        {{ filterform.stopdate }},  
-        {{ filterform.category }}
+<nav class="navbar navbar-light bg-light"><h5>List filter: from - to, category:</h5></nav>
+<nav class="navbar navbar-light bg-light">
+    <div>
+    <form method="post" action="{% url 'index' %}">
+        <div class="auto-submit">
+            {% csrf_token %}
+            {{ filterform.startdate }} - 
+            {{ filterform.stopdate }},  
+            {{ filterform.category }}
+        </div>
+    </form>
     </div>
-  </form>
-</div>
-
+</nav>
 
 <!-- ################################ JOURNAL  -->
 <table
@@ -47,17 +48,10 @@
             <td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.category }}</td>
             <td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.description }}</td>                
             <td id="td-id-2" class="td-class-1" data-title="bootstrap table">
-                <form method="post" action="{% url 'delete_note' %}">
-                    {% csrf_token %}    
-                    <input type="hidden" name="id" value="{{ note.id }}" />
-                    <input type="hidden" name="startdate" value="{{ filter.startdate }}" />
-                    <input type="hidden" name="stopdate" value="{{ filter.stopdate }}" />
-                    <input type="hidden" name="category" value="{{ filter.category }}" />
-                    <button class="btn btn-danger btn-sm deleteNoteButton" type="submit" value="{{ note.id }}">Delete</button>
+                <button class="btn btn-outline-danger btn-sm deleteNoteButton" type="submit" value="{{ note.id }}">Delete</button>
                 </br>
-                    <a class="btn btn-info btn-sm" href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
-                </form>
-            </td>            
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
+            </td>           
     </tr>
     {% endfor %} 
     </tbody>
@@ -69,7 +63,7 @@
 <table class='table'>
     <tr>
         <td>Sum:</td>
-        <td>{{ summary }}</td>        
+        <td id="value_sum">{{ summary }}</td>        
     </tr>
 </table>
 
@@ -93,7 +87,7 @@
 
 
 
-<form method="post" action="{% url 'import' %}" enctype="multipart/form-data"></td>
+<form method="post" action="{% url 'import' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.non_field_errors }}
     {% for hidden_field in form.hidden_fields %}
@@ -103,9 +97,14 @@
 
     </br>
 
-    <div>        
-        {{ import_form }}
-        <input class="btn btn-default" type ="submit" value="Send">
+    <div>
+        {{ import_form.label }}
+        <label class="btn btn-outline-secondary btn-sm custom-file-upload">
+            Import from CSV
+            {{ import_form.file }}
+        </label>
+        <label id="uploadButtonLabel">No file chosen</label>
+        <input class="btn btn-outline-secondary btn-sm" type ="submit" value="Send">
     </div>
 </form>
 
@@ -120,14 +119,21 @@ $(document).ready(function(){
 });
 
 
+//custom filepicker, handle label:
+const actualBtn = document.getElementById('id_file');
+const fileChosen = document.getElementById('uploadButtonLabel');
+actualBtn.addEventListener('change', function(){
+    fileChosen.textContent = this.files[0].name
+})
+
+//ajax for note delete - delete tr
 $(document).on('click', '.deleteNoteButton', function(e) {
     e.preventDefault();  //just for now, later make type=button instead of submit
-    let noteId = $(this).val();
+    const noteId = $(this).val();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    let parentTr = $(this).closest('tr');
+    const parentTr = $(this).closest('tr');
     $(this).html("Deleting....");
 
-    
     $.ajax({ 
         url: "{% url 'delete_note_ajax' %}", 
         data: {'note_id': noteId},
@@ -138,12 +144,13 @@ $(document).on('click', '.deleteNoteButton', function(e) {
         },
         success: function (data, response) {
             if(data['deleted']) {
-                parentTr.slideUp(300,function() {
-					parentTr.remove();
-				});
+                parentTr.fadeOut("slow", function() {
+                    parentTr.remove();
+                    $('td#value_sum').html(data['value_sum']);
+                 });
             }
             else {
-                alert('Cannot delete');
+                alert('Cannot delete, perhaps it was already deleted ?');
             }
         }, 
         error: function () {    
