@@ -48,17 +48,10 @@
             <td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.category }}</td>
             <td id="td-id-2" class="td-class-1" data-title="bootstrap table">{{ note.description }}</td>                
             <td id="td-id-2" class="td-class-1" data-title="bootstrap table">
-                <form method="post" action="{% url 'delete_note' %}">
-                    {% csrf_token %}    
-                    <input type="hidden" name="id" value="{{ note.id }}" />
-                    <input type="hidden" name="startdate" value="{{ filter.startdate }}" />
-                    <input type="hidden" name="stopdate" value="{{ filter.stopdate }}" />
-                    <input type="hidden" name="category" value="{{ filter.category }}" />
-                    <button class="btn btn-outline-danger btn-sm deleteNoteButton" type="submit" value="{{ note.id }}">Delete</button>
+                <button class="btn btn-outline-danger btn-sm deleteNoteButton" type="submit" value="{{ note.id }}">Delete</button>
                 </br>
-                    <a class="btn btn-outline-primary btn-sm" href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
-                </form>
-            </td>            
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'edit_note' %}/{{ note.id }}">Edit</a>
+            </td>           
     </tr>
     {% endfor %} 
     </tbody>
@@ -94,7 +87,7 @@
 
 
 
-<form method="post" action="{% url 'import' %}" enctype="multipart/form-data"></td>
+<form method="post" action="{% url 'import' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.non_field_errors }}
     {% for hidden_field in form.hidden_fields %}
@@ -139,7 +132,6 @@ $(document).on('click', '.deleteNoteButton', function(e) {
     const noteId = $(this).val();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const parentTr = $(this).closest('tr');
-    const valueSumTd = $('#value_sum');
     $(this).html("Deleting....");
 
     $.ajax({ 
@@ -154,8 +146,8 @@ $(document).on('click', '.deleteNoteButton', function(e) {
             if(data['deleted']) {
                 parentTr.fadeOut("slow", function() {
                     parentTr.remove();
+                    $('td#value_sum').html(data['value_sum']);
                  });
-                valueSumTd.html(data['value_sum']);
             }
             else {
                 alert('Cannot delete, perhaps it was already deleted ?');

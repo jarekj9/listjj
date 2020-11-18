@@ -2,10 +2,10 @@
 
 {% block add_note %}
 
-{% if edited_note is None %}
+{% if edited_note_id is None %}
     </br>
     <nav class="navbar navbar-light bg-light"><h5>Add Entry:</h5></nav>
-    <form method="post" action="{% url 'addnote' %}">
+    <form method="post" action="{% url 'add_note' %}">
       {% csrf_token %}
       <table>
         {{ noteform.as_table }}
@@ -23,8 +23,10 @@
           <table>
             {{ noteform.as_table }}
           </table>
-            <input type="hidden" name="note_id" value="{{ edited_note.id }}" />
+
+            <input type="hidden" name="note_id" value="{{ edited_note_id }}" />
             <button class="btn btn-outline-primary" type="submit">Save</button>
+
         </form>
       </div>
     <div>
