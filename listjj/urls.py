@@ -10,6 +10,7 @@ from app.views import *
 from django.contrib.auth import views as auth_views
 from django.urls import path, re_path
 from django.conf.urls import include
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 urlpatterns = [
@@ -26,6 +27,8 @@ urlpatterns = [
     path('export', ExportNotesView.as_view(),name="export"),
     path('import', ImportNotesView.as_view(),name="import"),
     path('api/', include('listjj.apiurls')),
+    path('new_api_token/', GetApiTokenView.as_view(),name="new_api_token"),
+    path('get_api_token/', obtain_auth_token, name='get_api_token'),  # POST
     path("admin/", admin.site.urls),
     path('register/', RegisterView.as_view(),name="register"),
 
