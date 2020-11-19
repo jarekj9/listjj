@@ -4,23 +4,24 @@
 <title>List JJ</title>
 {% load static %}
 <link rel="stylesheet" href="{% static 'style.css' %}">
-<link href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<style>
+<link rel="stylesheet" href="{% static 'bootstrap/bootstrap-table.min.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
 
-</style>
-<!--Bootstrap:-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+<script src="{% static 'jquery.min.js' %}"></script>
 
-<!--For datepicker to work:-->
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- Bootstrap:-->
+<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
+<script src="{% static 'bootstrap/bootstrap-table.min.js' %}"></script>
 
-<!--datepicker theme:-->
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<!-- For datepicker to work: -->
+<script src="{% static 'jquery-1.12.4.js' %}"></script>
+<script src="{% static 'jquery-ui.js' %}"></script>
 
+<!-- For datepicker theme: -->
+<link rel="stylesheet" href="{% static 'for_date_picker/jquery-ui.css' %}">
+
+<!-- Sweetalert2: -->
+<script src="{% static 'sweetalert2/dist/sweetalert2.all.min.js' %}"></script>
 
 
 <meta name="viewport" content="width=device-width">

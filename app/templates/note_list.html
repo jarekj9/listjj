@@ -85,7 +85,7 @@
     </tr>
 </table>
 
-
+<a id="newApiKey" href="{% url 'new_api_token' %}">Create new API key</a>
 
 <form method="post" action="{% url 'import' %}" enctype="multipart/form-data">
     {% csrf_token %}
@@ -111,6 +111,25 @@
 
 
 <script>
+
+$('#newApiKey').click(function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Are you sure ?',
+        text: 'If old key exists, it will be replaced.',
+        icon: 'warning',
+        showCancelButton: 'true',
+        confirmButtonText: 'Confirm'
+        }).
+        then((result) => {
+            if (result.value) {
+                window.location = $(this).attr("href"); 
+            }
+        });
+})
+
+
+
 //auto submits filter form
 $(document).ready(function(){ 
     $(".auto-submit").change(function() {

@@ -18,6 +18,7 @@ from django.contrib.auth.models import User
 from .serializers import JournalSerializer
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 
 from .notes_service import NotesService
 import datetime
@@ -217,6 +218,14 @@ class JournalViewSet(viewsets.ModelViewSet):
     queryset = Journal.objects.all().select_related('category')
     serializer_class = JournalSerializer
 
+
+class GetApiTokenView(LoginRequiredMixin, GroupMembershipRequired, View):
+    
+    def get(self,request):
+        Token.objects.filter(user=request.user).delete()
+        token = Token.objects.create(user=request.user).key
+        return HttpResponse(f'Your new API key is: {token}')
+            
 
 class AddNoteView(LoginRequiredMixin, GroupMembershipRequired, View):
 
