@@ -9,19 +9,27 @@
 </br>
 
 <!-- ################################ FILTER  -->
-<nav class="navbar navbar-light bg-light"><h5>List filter: from - to, category:</h5></nav>
 <nav class="navbar navbar-light bg-light">
-    <div>
+    <h5>Filter:</h5>
+</nav>
+    <div style="margin: 10px;">
     <form method="post" action="{% url 'index' %}">
         <div class="auto-submit">
             {% csrf_token %}
-            {{ filterform.startdate }} - 
-            {{ filterform.stopdate }},  
-            {{ filterform.category }}
+            <table>
+            <tr>
+                <td>From:</td> <td>To:</td> <td>Category:</td>
+            </tr>
+            <tr>
+                <td>{{ filterform.startdate }}</td>
+                <td>{{ filterform.stopdate }}</td>
+                <td>{{ filterform.category }}</td>
+            </tr>
+            </table>
         </div>
     </form>
     </div>
-</nav>
+
 
 <!-- ################################ JOURNAL  -->
 <table
