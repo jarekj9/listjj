@@ -130,8 +130,12 @@ $('#newApiKey').click(function(e){
         confirmButtonText: 'Confirm'
         }).
         then((result) => {
-            if (result.value) {
-                window.location = $(this).attr("href"); 
+            if (result.isConfirmed) {
+                return fetch("{% url 'new_api_token' %}").
+                then(response => response.json()).
+                then(data=> {
+                    Swal.fire({title: 'New key:', text: data.token});
+                });
             }
         });
 })

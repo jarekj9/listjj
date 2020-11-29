@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.http import JsonResponse
 from django.views import View
 from .models import *
 from .forms import *
@@ -220,11 +221,11 @@ class JournalViewSet(viewsets.ModelViewSet):
 
 
 class GetApiTokenView(LoginRequiredMixin, GroupMembershipRequired, View):
-    
+    '''Will delete and create token, then return as json response'''
     def get(self,request):
         Token.objects.filter(user=request.user).delete()
         token = Token.objects.create(user=request.user).key
-        return HttpResponse(f'Your new API key is: {token}')
+        return JsonResponse({'token': token})
             
 
 class AddNoteView(LoginRequiredMixin, GroupMembershipRequired, View):

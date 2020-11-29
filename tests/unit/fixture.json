@@ -1,0 +1,39 @@
+[
+    {
+        "model": "auth.group",
+        "pk": 2,
+        "fields": 
+        {
+            "name": "accessGroup",
+            "permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 12,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$oKudBgLeGzdi$dOI8jlMi25PK3K3iLsvbsymtXxouOLFbIvkrRknHZLQ=",
+            "last_login": "2020-11-18T14:22:29.549Z",
+            "is_superuser": false,
+            "username": "test_user",
+            "first_name": "",
+            "last_name": "",
+            "email": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-07-11T16:08:33Z",
+            "groups": [
+                2
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "app.categories",
+        "pk": 33,
+        "fields": {
+            "login": 12,
+            "category": "test_category"
+        }
+    }
+]
