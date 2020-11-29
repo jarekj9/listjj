@@ -58,9 +58,8 @@ def test_add_note(client):
     user = User.objects.get(username="test_user")
     client.login(username=user.username, password='test_password')
     url = reverse('add_note')
-    headers = {}
     data = {'value': 1, 'category': 33, 'description': 'test note'}
-    response = client.post(url, data=data, headers=headers)
+    response = client.post(url, data=data, headers={})
 
     journal = Journal.objects.filter(login=user)[0]
     assert journal.login.username == 'test_user'
