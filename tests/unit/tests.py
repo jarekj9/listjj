@@ -67,4 +67,4 @@ def test_add_note(client):
     assert journal.value == 1.0
     assert journal.category.category == 'test_category'
 
-    assert response.status_code == 302
+    assert response.status_code == 200
