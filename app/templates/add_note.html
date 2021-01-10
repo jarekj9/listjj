@@ -5,7 +5,7 @@
 {% if edited_note_id is None %}
     </br>
     <nav class="navbar navbar-light bg-light"><h5>Add Entry:</h5></nav>
-    <form method="post" action="{% url 'add_note' %}">
+    <form method="post" action="{% url 'add_note' %}" id="addNoteForm">
       {% csrf_token %}
       <table>
         {{ noteform.as_table }}

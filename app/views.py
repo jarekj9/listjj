@@ -40,6 +40,8 @@ class NotesListView(LoginRequiredMixin, GroupMembershipRequired, NotesService, V
     '''Main Page'''
 
     def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return redirect('/accounts/login')
         self.filter = self.set_filter(request)
         self.note_form = NoteForm(login=request.user)
         self.edited_note_id = None

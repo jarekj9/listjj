@@ -174,14 +174,14 @@ actualBtn.addEventListener('change', function(){
 })
 
 //ajax for note add
-$(document).on('click', '.addNoteButton', function(e) {
+$(document).on('submit', '#addNoteForm', function(e) {
     e.preventDefault();
     const value = $('#id_value').val();
     const category = $('#id_category').val();
     const description = $('#id_description').val();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const table = $('.notesTable');
-    const saveButton = $(this);
+    const saveButton = $('#addNoteButton');
     const newRow = $('#notesRowTemplate').clone();
     const currentCategoryFilterVal = $('.filterTable select').val();
     const noRecordsInfoRow = $('tr.no-records-found');
@@ -220,10 +220,14 @@ $(document).on('click', '.addNoteButton', function(e) {
             }
             else {
                 alert('Cannot add');
+                table.animate({'backgroundColor':'#FFFFFF'}, 300);
+                saveButton.html("Save");
             }
         }, 
         error: function () {    
-            alert('Error'); 
+            alert('Error');
+            table.animate({'backgroundColor':'#FFFFFF'}, 300);
+            saveButton.html("Save");
         }, 
     }); 
 
