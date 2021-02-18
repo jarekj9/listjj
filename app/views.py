@@ -41,7 +41,7 @@ class NotesListView(LoginRequiredMixin, GroupMembershipRequired, NotesService, V
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_authenticated:
-            return redirect('/accounts/login')
+            return super().dispatch(request, *args, **kwargs)
         self.filter = self.set_filter(request)
         self.note_form = NoteForm(login=request.user)
         self.edited_note_id = None
@@ -231,25 +231,6 @@ class GetApiTokenView(LoginRequiredMixin, GroupMembershipRequired, View):
             
 
 class AddNoteView(LoginRequiredMixin, GroupMembershipRequired, NotesService, View):
-
-    # def post(self,request):
-    #     form = NoteForm(request.POST, login=request.user)
-    #     if form.is_valid():
-    #         date = datetime.date.today()
-    #         value = form.cleaned_data["value"]
-    #         categoryobj = form.cleaned_data["category"]
-    #         description = form.cleaned_data["description"]
-    #         note = Journal(
-    #             login=request.user,
-    #             date=date,
-    #             value=value,
-    #             category=categoryobj,
-    #             description=description,
-    #         )
-    #         note.save()
-    #         return redirect("/")
-    #     else:
-    #         return HttpResponse("Wrong user input")
 
     def post(self,request):
         form = NoteForm(request.POST, login=request.user)
