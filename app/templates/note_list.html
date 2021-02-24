@@ -239,7 +239,9 @@ $(document).on('click', '.deleteNoteButton', function(e) {
     const noteId = $(this).val();
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const parentTr = $(this).closest('tr');
-    $(this).html("Deleting....");
+    const button = $(this);
+    button.html("Deleting....");
+    button.attr("disabled", "disabled");
 
     $.ajax({ 
         url: "{% url 'delete_note_ajax' %}", 
@@ -254,15 +256,21 @@ $(document).on('click', '.deleteNoteButton', function(e) {
                 parentTr.fadeOut("slow", function() {
                     parentTr.remove();
                     $('td#value_sum').html(data['value_sum']);
-                 });
+                });
+                toastr.options = {"progressBar": true};
+                toastr["success"]("Deleted.");
             }
             else {
-                alert('Cannot delete, perhaps it was already deleted ?');
+                toastr["warning"]("Cannot delete, perhaps it was already deleted ?");
+                button.removeAttr("disabled");
+                button.html("Delete");
             }
         }, 
         error: function () {    
-            alert('Error'); 
-        }, 
+            toastr["error"]("Error.");
+            button.removeAttr("disabled");
+            button.html("Delete");
+        },
     }); 
 
 });
