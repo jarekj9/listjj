@@ -15,8 +15,11 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('', NotesListView.as_view(),name="index"),
+    path('download', DownloadFileView.as_view(), name="download"),
+    re_path('download/(?P<attachment_id>[^/]*)/?', DownloadFileView.as_view()),
     path("delete_note_ajax", DeleteNoteView.as_view(), name="delete_note_ajax"),
     path("add_note", AddNoteView.as_view(), name="add_note"),
+    path("save_temp_attachment", SaveTempAttachmentView.as_view(), name="save_temp_attachment"),
     path("edit_note", EditNoteView.as_view(), name="edit_note"),
     re_path("edit_note/(?P<note_id>[^/]*)/?", EditNoteView.as_view()),
     path('modify_categories', AddCategoryView.as_view(),name="modify_categories"),

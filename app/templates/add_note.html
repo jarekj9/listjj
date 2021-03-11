@@ -5,20 +5,30 @@
 {% if edited_note_id is None %}
     </br>
     <nav class="navbar navbar-light bg-light"><h5>Add Entry:</h5></nav>
-    <form method="post" action="{% url 'add_note' %}" id="addNoteForm">
-      {% csrf_token %}
-      <table>
-        {{ noteform.as_table }}
-      </table>
-        <button class="btn btn-outline-primary addNoteButton" type="submit">Save</button>
-    </form>
+    <div style="margin: 10px;">
+        <div style="float:left;"> 
+            <form method="post" action="{% url 'add_note' %}" id="addNoteForm">
+            {% csrf_token %}
+            <table>
+                {{ noteform.as_table }}
+            </table>
+        <br />
+                <button class="btn btn-outline-primary addNoteButton" type="submit">Save</button>
+            </form>
+        </div>  
+        <div style="float:left;">
+            <form method="post" action="{% url 'save_temp_attachment' %}" id="saveTempAttachment" class="dropzone customDropzone">
+                {% csrf_token %}
+            </form>
+        </div>  
+    </div>  
 
 {% else %}
     <!-- This form will appear only if note is edited-->
     <div class="container">
       <div class="jumbotron">
         <h5>Edit entry:</h5>
-        <form method="post" action="{% url 'edit_note' %}">
+        <form method="post" action="{% url 'edit_note' %}"> class=
           {% csrf_token %}
           <table>
             {{ noteform.as_table }}
@@ -31,6 +41,12 @@
       </div>
     <div>
 
+
+<script>
+
+
+
+<script>
 {% endif %}
 
 {% endblock %}

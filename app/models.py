@@ -19,6 +19,17 @@ class Journal(models.Model):
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     description = models.CharField(max_length=1000)
 
+class Attachment(models.Model):
+    journal_id = models.ForeignKey(Journal, on_delete=models.CASCADE)
+    login = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField()
+    description = models.CharField(max_length=1000)
+    file = models.FileField()
+    file_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.pk)
+
 
 def get_upload_path(instance, filename):
     return "import/{0}/{1}".format(instance.user.username, filename)

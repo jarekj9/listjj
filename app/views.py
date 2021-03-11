@@ -1,10 +1,17 @@
+import shutil
+import os
+import json
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.http import JsonResponse
 from django.views import View
+from django.core.files.storage import FileSystemStorage
+from django.core import serializers
+from django.http import HttpResponse, Http404, StreamingHttpResponse, FileResponse
 from .models import *
 from .forms import *
+
 
 # for auth:
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -24,6 +31,8 @@ from rest_framework.authtoken.models import Token
 from .notes_service import NotesService
 import datetime
 import csv
+import urllib, mimetypes
+from wsgiref.util import FileWrapper
 
 
 # filter only users, that are members of group
@@ -67,6 +76,9 @@ class NotesListView(LoginRequiredMixin, GroupMembershipRequired, NotesService, V
         """View main page"""
         import_form = ImportForm()
         record_list = self.get_all_notes(request.user, self.filter)
+        temp_path = os.path.join('media', 'attachments', f'{request.user.id}', 'temp')
+        shutil.rmtree(temp_path, ignore_errors=True)
+
         return render(request, "add_note.html",
             {
                 "all_records": record_list,
@@ -96,6 +108,18 @@ class NotesListView(LoginRequiredMixin, GroupMembershipRequired, NotesService, V
         else:
             return HttpResponse("Wrong user input")
 
+
+class DownloadFileView(LoginRequiredMixin, GroupMembershipRequired, View):
+    def get(self, request, *args, **kwargs):
+        attachment_id = kwargs.get('attachment_id')
+        attachment = Attachment.objects.get(id=attachment_id)
+        file_wrapper = FileWrapper(open(attachment.file.path,'rb'))
+        file_mimetype = mimetypes.guess_type(attachment.file.path)
+        response = HttpResponse(file_wrapper, content_type=file_mimetype )
+        response['X-Sendfile'] = attachment.file
+        response['Content-Length'] = os.stat(attachment.file.path).st_size
+        response['Content-Disposition'] = 'attachment; filename=%s/' % str(attachment.file_name) 
+        return response
 
 class EditNoteView(LoginRequiredMixin, GroupMembershipRequired, View):
 
@@ -247,6 +271,10 @@ class AddNoteView(LoginRequiredMixin, GroupMembershipRequired, NotesService, Vie
                 description=description,
             )
             note.save()
+            attachments = self.save_attachments(request, note)
+            if attachments:
+                attachments = json.loads(serializers.serialize('json', attachments))
+
             filter = self.set_filter(request)
             record_list = self.get_all_notes(request.user, filter)
             value_sum = self.page_values_sum(record_list)
@@ -254,16 +282,30 @@ class AddNoteView(LoginRequiredMixin, GroupMembershipRequired, NotesService, Vie
                                  'value_sum': value_sum,
                                  'category': categoryobj.category,
                                  'id': note.id,
-                                 'date': date.strftime('%d-%m-%Y')})
+                                 'date': date.strftime('%d-%m-%Y'),
+                                 'attachments': attachments})
         else:
             return JsonResponse({'saved': False})
 
+class SaveTempAttachmentView(LoginRequiredMixin, GroupMembershipRequired, View):
+    
+    def post(self,request):
+        print(request.FILES)
+        file = request.FILES.get('file')
+        fs = FileSystemStorage(f'media/attachments/{request.user.id}/temp')
+        filename = fs.save(file.name, file)
+        file_url = fs.url(filename)
+        return JsonResponse({'file_url': file_url})
 
 class DeleteNoteView(LoginRequiredMixin, GroupMembershipRequired, NotesService, View):
 
     def post(self, request):
         """Delete users note, ajax way"""
         id = request.POST.get("note_id")
+        attachment = Attachment.objects.filter(journal_id=id)
+        attachment_directory = os.path.dirname(attachment[0].file.path) if len(attachment) else None
+        if attachment_directory:
+            shutil.rmtree(attachment_directory)
         delete_result = Journal.objects.filter(id=id).delete()
         if delete_result[0]:
             filter = self.set_filter(request)

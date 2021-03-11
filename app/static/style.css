@@ -82,3 +82,18 @@ input[type=file] {
 .custom-file-upload {
     margin: 0px;
 }
+
+.customDropzone {
+    border: dashed;
+    border-color: #ccc;
+    border-radius: 10px;
+    height: auto;
+    width: auto;
+    margin: 10px;
+    /* zoom: 0.8; */
+    padding:1px;
+
+}
+.customDropzone:hover {
+    background-color: aliceblue;
+}

@@ -2,34 +2,35 @@
 
 {% block page %}
 
-<div >
+<div>
     {% block add_note %}
     {% endblock %}
 </div>
 </br>
 
 <!-- ################################ FILTER  -->
-<nav class="navbar navbar-light bg-light">
-    <h5>Filter:</h5>
-</nav>
-    <div style="margin: 10px;">
-    <form method="post" action="{% url 'index' %}">
-        <div class="auto-submit">
-            {% csrf_token %}
-            <table class='filterTable'>
-            <tr>
-                <td>From:</td> <td>To:</td> <td>Category:</td>
-            </tr>
-            <tr>
-                <td>{{ filterform.startdate }}</td>
-                <td>{{ filterform.stopdate }}</td>
-                <td>{{ filterform.category }}</td>
-            </tr>
-            </table>
+<div style="clear: left;">
+    <nav class="navbar navbar-light bg-light">
+        <h5>Filter:</h5>
+    </nav>
+        <div style="margin: 10px;">
+        <form method="post" action="{% url 'index' %}">
+            <div class="auto-submit">
+                {% csrf_token %}
+                <table class='filterTable'>
+                <tr>
+                    <td>From:</td> <td>To:</td> <td>Category:</td>
+                </tr>
+                <tr>
+                    <td>{{ filterform.startdate }}</td>
+                    <td>{{ filterform.stopdate }}</td>
+                    <td>{{ filterform.category }}</td>
+                </tr>
+                </table>
+            </div>
+        </form>
         </div>
-    </form>
-    </div>
-
+</div>
 
 <!-- ################################ JOURNAL  -->
 
@@ -39,7 +40,7 @@
         <td id="td-id-2" class="td-class-1 notesDateTd" data-title="bootstrap table"></td>
         <td id="td-id-2" class="td-class-1 notesValueTd" data-title="bootstrap table"></td>
         <td id="td-id-2" class="td-class-1 notesCategoryTd" data-title="bootstrap table"></td>
-        <td id="td-id-2" class="td-class-1 notesDescriptionTd" data-title="bootstrap table"></td>                
+        <td id="td-id-2" class="td-class-1 notesDescriptionTd" data-title="bootstrap table"><span class="noteAttachments"></span></td>                
         <td id="td-id-2" class="td-class-1" data-title="bootstrap table">
             <button class="btn btn-outline-danger btn-sm deleteNoteButton" type="submit" value="">Delete</button>
             </br>
@@ -70,7 +71,13 @@
             <td id="td-id-2" class="td-class-1 notesDateTd" data-title="bootstrap table">{{ note.date }}</td>
             <td id="td-id-2" class="td-class-1 notesValueTd" data-title="bootstrap table">{{ note.value }}</td>
             <td id="td-id-2" class="td-class-1 notesCategoryTd" data-title="bootstrap table">{{ note.category }}</td>
-            <td id="td-id-2" class="td-class-1 notesDescriptionTd" data-title="bootstrap table">{{ note.description }}</td>                
+            <td id="td-id-2" class="td-class-1 notesDescriptionTd" data-title="bootstrap table">{{ note.description }}
+                <span class="noteAttachments">
+                    {% for attachment in note.attachments %}
+                        <a href="{% url 'download' %}/{{ attachment.id }}">{{ attachment.file_name }}</a>
+                    {% endfor %}
+                </span>
+            </td>                
             <td id="td-id-2" class="td-class-1" data-title="bootstrap table">
                 <button class="btn btn-outline-danger btn-sm deleteNoteButton" type="submit" value="{{ note.id }}">Delete</button>
                 </br>
@@ -185,6 +192,7 @@ $(document).on('submit', '#addNoteForm', function(e) {
     const newRow = $('#notesRowTemplate').clone();
     const currentCategoryFilterVal = $('.filterTable select').val();
     const noRecordsInfoRow = $('tr.no-records-found');
+    const dropzone = $("#saveTempAttachment").get(0).dropzone;;
 
     saveButton.html("Saving....");
     $.ajax({ 
@@ -207,16 +215,22 @@ $(document).on('submit', '#addNoteForm', function(e) {
                     addedRow.find('.notesDateTd').html(data['date']);
                     addedRow.find('.notesValueTd').html(value);
                     addedRow.find('.notesCategoryTd').html(data['category']);
-                    addedRow.find('.notesDescriptionTd').html(description);
+                    addedRow.find('.notesDescriptionTd').prepend(description+" ");
+                    data['attachments'].forEach(function (file_row, index) {
+                        let fileName = file_row['fields']['file_name'];
+                        let fileId = file_row['fields']['id'];
+                        addedRow.find('.noteAttachments').append('<a href="' + window.location.href + '/download/' + file_row.pk +'">' + fileName + '</a> ');
+                    });
                     addedRow.find('.deleteNoteButton').val(data['id']);
                     addedRow.find('.notesEditLink').attr("href", "{% url 'edit_note' %}/"+data['id']);
-                    addedRow.fadeIn("slow");
                     $('td#value_sum').html(data['value_sum']);
+                    addedRow.fadeIn("slow");
                 }
                 saveButton.html("Save");
                 $('#id_value').val(0);
                 $('#id_description').val('');
                 table.animate({'backgroundColor':'#FFFFFF'}, 300);
+                dropzone.removeAllFiles();
             }
             else {
                 alert('Cannot add');

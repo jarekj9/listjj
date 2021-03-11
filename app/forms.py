@@ -56,7 +56,6 @@ class NoteForm(forms.Form):
         except AttributeError:  # profile.default_category does not exist yet
             default_category = (0, 0)
         self.fields["category"].initial = default_category
-
     class Meta:  # because date variable is ignored in the Form (it is set in AddNoteView method)
         model = Journal
         exclude = ["date"]

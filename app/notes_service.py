@@ -1,5 +1,7 @@
 from .models import *
 import datetime
+import os
+import datetime
 
 
 class NotesService:
@@ -17,6 +19,7 @@ class NotesService:
             category__in=filter["category"],
         ).order_by("date")
         for item in all_records:
+            attachments = Attachment.objects.filter(journal_id=item.id).order_by("date")
             output.append(
                 {
                     "id": item.id,
@@ -25,9 +28,9 @@ class NotesService:
                     "value": item.value,
                     "category": item.category.category,  # related object
                     "description": item.description,
+                    "attachments": attachments,
                 }
             )
-
         return output
 
     def page_values_sum(self, notes):
@@ -64,3 +67,32 @@ class NotesService:
                     "stopdate": request.session.get("stopdate"),
                 })
         return filter
+
+    def save_attachments(self, request, note):
+        """Moves files from temp to folder to specific note folder,
+           after the note is saved
+        """
+        user_path = os.path.join('media', 'attachments', f'{request.user.id}')
+        user_temp_path = os.path.join('media', 'attachments', f'{request.user.id}', 'temp')
+        if not os.path.exists(user_temp_path):
+            return []
+        os.mkdir(os.path.join('media', 'attachments', f'{request.user.id}', 'temp'))
+        file_names = os.listdir(f'media/attachments/{request.user.id}/temp')
+        attachments = []
+        for file_name in file_names:
+            source_path = os.path.join(user_path, 'temp', file_name)
+            dest_path = os.path.join(user_path, f'{note.id}', file_name)
+            if not os.path.exists(os.path.join(user_path, f'{note.id}')):
+                os.makedirs(os.path.join(user_path, f'{note.id}'))
+            os.rename(source_path , dest_path)
+            attachment = Attachment(
+                journal_id=note,
+                date=datetime.date.today(),
+                login=request.user,
+                description='',
+                file=os.path.join('attachments', f'{request.user.id}', f'{note.id}', file_name),
+                file_name=file_name,
+            )
+            attachment.save()
+            attachments.append(attachment)
+        return attachments
