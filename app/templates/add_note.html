@@ -3,24 +3,36 @@
 {% block add_note %}
 
 {% if edited_note_id is None %}
-    </br>
+    <br />
     <nav class="navbar navbar-light bg-light"><h5>Add Entry:</h5></nav>
     <div style="margin: 10px;">
-        <div style="float:left;"> 
+        <div> 
             <form method="post" action="{% url 'add_note' %}" id="addNoteForm">
-            {% csrf_token %}
-            <table>
-                {{ noteform.as_table }}
-            </table>
-        <br />
-                <button class="btn btn-outline-primary addNoteButton" type="submit">Save</button>
-            </form>
-        </div>  
-        <div style="float:left;">
-            <form method="post" action="{% url 'save_temp_attachment' %}" id="saveTempAttachment" class="dropzone customDropzone">
                 {% csrf_token %}
+                <table>
+                    {{ noteform.as_table }}
+                </table>
+                <br />
+                <button class="btn btn-outline-primary addNoteButton" type="submit">Save</button>
+                <a class="btn btn-outline-primary" data-toggle="collapse" href="#collapseDropzone" role="button" aria-expanded="false" aria-controls="collapseDropzone">
+                    Show dropzone
+                </a>
             </form>
-        </div>  
+        </div>
+        <br />
+
+        <div class="collapse" id="collapseDropzone">
+            <div class="card card-body">
+                <form method="post" action="{% url 'save_temp_attachment' %}" id="saveTempAttachment" class="dropzone customDropzone">
+                    {% csrf_token %}
+                </form>
+            </div>  
+        </div>
+
+
+
+
+
     </div>  
 
 {% else %}
