@@ -76,7 +76,7 @@ class NotesService:
         user_temp_path = os.path.join('media', 'attachments', f'{request.user.id}', 'temp')
         if not os.path.exists(user_temp_path):
             return []
-        os.mkdir(os.path.join('media', 'attachments', f'{request.user.id}', 'temp'))
+        os.makedirs(os.path.join('media', 'attachments', f'{request.user.id}', 'temp'), exist_ok=True)
         file_names = os.listdir(f'media/attachments/{request.user.id}/temp')
         attachments = []
         for file_name in file_names:
