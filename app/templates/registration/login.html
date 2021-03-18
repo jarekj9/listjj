@@ -3,16 +3,27 @@
 
 {% block content %}
 
-  <h2>Login</h2>
-  <form method="post" action="{% url 'login' %}">
-      {% csrf_token %}
-	  Username: {{ form.username }}</br>
-      Password: {{ form.password }}</br></br>
-      <button type="submit">Login</button>
-  </form>
 
-  <a href="{% url 'register' %}">Register</a>
-  </br>
-  (Your account needs to be approved after registration)
+
+<div class="wrapper fadeInDown">
+<div id="formContent">
+    <div class="fadeIn first">
+        <h2>Login</h2>
+    </div>
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <span class="fadeIn second">User:<br />{{ form.username }}</span>
+		<span class="fadeIn third">Password: {{ form.password }}</span>
+    <input type="submit" class="fadeIn fourth" value="Log In">
+    </form>
+
+    <div id="formFooter" class="fadeIn fourth">
+        <a class="underlineHover" href="{% url 'register' %}">Register</a><br />
+        (Your account needs to be approved after registration)
+    </div>
+
+</div>
+</div>
 
 {% endblock %}

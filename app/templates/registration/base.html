@@ -1,4 +1,39 @@
-<div class="container">
+<!DOCTYPE html>
+<html>
+<head>
+<title>List JJ</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'style-login.css' %}">
+
+<script src="{% static 'jquery.min.js' %}"></script>
+
+<!-- Bootstrap:-->
+<script src="{% static 'bootstrap/bootstrap.min.js' %}"></script>
+<script src="{% static 'bootstrap/bootstrap-table.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'bootstrap/bootstrap-table.min.css' %}">
+<link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
+
+<!-- Sweetalert2: -->
+<script src="{% static 'sweetalert2/dist/sweetalert2.all.min.js' %}"></script>
+
+<!-- Toasts -->
+<script src="{% static 'toastr/toastr.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'toastr/toastr.min.css' %}">
+
+
+<meta name="viewport" content="width=device-width">
+</head>
+
+<body class='container'>
+
+
+<div style="margin: auto;margin-top: 10%;" class="container">
     {% block content %}
     {% endblock %}
 </div>
+
+
+
+
+</body>
+</html>
