@@ -1,5 +1,4 @@
 import pytest
-import listjj
 import os
 import logging
 from django.contrib.auth.models import User, Group
@@ -10,7 +9,7 @@ from django.core.management import call_command
 APP_PATH = os.path.dirname(listjj.__file__)
 TEST_PATH = APP_PATH+'/../tests/unit'
 logging.basicConfig(level=logging.INFO, filename=APP_PATH + 'logging.log')
-
+import listjj
 
 @pytest.fixture(scope='session')
 def django_db_setup(django_db_setup, django_db_blocker):

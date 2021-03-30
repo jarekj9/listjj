@@ -1,3 +1,6 @@
+# passwords
+config.conf
+
 venv
 *.pyc
 .env
