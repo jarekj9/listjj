@@ -68,6 +68,12 @@ class NotesService:
                 })
         return filter
 
+    def get_recent_category(self, request):
+        if request.session.get("category") not in [[None], None,]:
+            return Categories.objects.get(id=request.session["category"][0])
+        else:
+            return None
+
     def save_attachments(self, request, note):
         """Moves files from temp to folder to specific note folder,
            after the note is saved

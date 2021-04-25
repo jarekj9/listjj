@@ -46,6 +46,7 @@ class NoteForm(forms.Form):
 
     def __init__(self, *args, **kwargs):  # I need to access 'request.user' via constructor during object creation
         login = kwargs.pop("login")
+        recent_category = kwargs.pop("recent_category")
         super(NoteForm, self).__init__(*args, **kwargs)
     
         self.fields["category"].queryset = Categories.objects.filter(login=login)
@@ -55,6 +56,8 @@ class NoteForm(forms.Form):
             default_category = Categories.objects.get(login=login, id=login.profile.default_category.id)
         except AttributeError:  # profile.default_category does not exist yet
             default_category = (0, 0)
+        if recent_category:
+            default_category = Categories.objects.get(login=login, category=recent_category)
         self.fields["category"].initial = default_category
     class Meta:  # because date variable is ignored in the Form (it is set in AddNoteView method)
         model = Journal

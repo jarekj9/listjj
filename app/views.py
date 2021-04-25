@@ -52,7 +52,7 @@ class NotesListView(LoginRequiredMixin, GroupMembershipRequired, NotesService, V
         if not self.request.user.is_authenticated:
             return super().dispatch(request, *args, **kwargs)
         self.filter = self.set_filter(request)
-        self.note_form = NoteForm(login=request.user)
+        self.note_form = NoteForm(login=request.user, recent_category=self.get_recent_category(request))
         self.edited_note_id = None
         if kwargs.get('edited_note_id'):
             self.edited_note_id = kwargs.pop('edited_note_id')
