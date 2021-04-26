@@ -13,8 +13,8 @@
 
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
-        <div class="fadeIn second">User:<br />{{ form.username }}</div>
-		<div class="fadeIn third">Password:<br />{{ form.password }}</div>
+        <span class="fadeIn second">User:<br />{{ form.username }}</span>
+		<span class="fadeIn third">Password: {{ form.password }}</span>
     <input type="submit" class="fadeIn fourth" value="Log In">
     </form>
 

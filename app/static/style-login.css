@@ -47,7 +47,7 @@ html {
     background: #fff;
     padding: 30px;
     width: 90%;
-    max-width: 550px;
+    max-width: 450px;
     position: relative;
     padding: 0px;
     -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
@@ -115,7 +115,7 @@ html {
     transform: scale(0.95);
   }
   
-  input[type=text], input[type=password], input[type=email] {
+  input[type=text], input[type=password] {
     background-color: #f6f6f6;
     border: none;
     color: #0d0d0d;

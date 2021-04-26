@@ -72,7 +72,6 @@
             <td id="td-id-2" class="td-class-1 notesValueTd" data-title="bootstrap table">{{ note.value }}</td>
             <td id="td-id-2" class="td-class-1 notesCategoryTd" data-title="bootstrap table">{{ note.category }}</td>
             <td id="td-id-2" class="td-class-1 notesDescriptionTd" data-title="bootstrap table">{{ note.description }}
-                <br />
                 <span class="noteAttachments">
                     {% for attachment in note.attachments %}
                         <a href="{% url 'download' %}/{{ attachment.id }}">{{ attachment.file_name }}</a>

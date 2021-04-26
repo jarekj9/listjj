@@ -12,19 +12,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import django_heroku
-from configparser import ConfigParser
-import logging
-
-
-logging.basicConfig(level=logging.INFO) 
-
-if os.path.isfile('listjj/config.conf'):
-    conf = ConfigParser()
-    conf.read('config.conf')
-    EMAIL_PASSWORD = conf.get('email', 'PASSWORD', fallback='')
-else:
-    EMAIL_PASSWORD = ''
-    logging.warning('config.conf is missing, no email password will be set')
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -140,17 +127,9 @@ STATIC_URL = "/static/"
 
 django_heroku.settings(locals())
 
-# for auth/login:
+#I add this for auth/login:
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/accounts/login'
 
-# for file uploads:
+#I add this or file uploads:
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
-# for emails:
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'y4r3k99@gmail.com'
-EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
-EMAIL_PORT = 587

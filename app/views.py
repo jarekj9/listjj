@@ -304,7 +304,7 @@ class DeleteNoteView(LoginRequiredMixin, GroupMembershipRequired, NotesService, 
         id = request.POST.get("note_id")
         attachment = Attachment.objects.filter(journal_id=id)
         attachment_directory = os.path.dirname(attachment[0].file.path) if len(attachment) else None
-        if attachment_directory and os.path.exists(attachment_directory):
+        if attachment_directory:
             shutil.rmtree(attachment_directory)
         delete_result = Journal.objects.filter(id=id).delete()
         if delete_result[0]:
