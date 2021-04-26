@@ -257,7 +257,7 @@ class GetApiTokenView(LoginRequiredMixin, GroupMembershipRequired, View):
 class AddNoteView(LoginRequiredMixin, GroupMembershipRequired, NotesService, View):
 
     def post(self,request):
-        form = NoteForm(request.POST, login=request.user)
+        form = NoteForm(request.POST, login=request.user, recent_category=self.get_recent_category(request))
         if form.is_valid():
             date = datetime.date.today()
             value = form.cleaned_data["value"]
