@@ -46,10 +46,10 @@ class NoteForm(forms.Form):
 
     def __init__(self, *args, **kwargs):  # I need to access 'request.user' via constructor during object creation
         login = kwargs.pop("login")
-        if kwargs.get("recent_category"):
+        recent_category = None
+        if "recent_category" in kwargs.keys():
             recent_category = kwargs.pop("recent_category")
-        else:
-            recent_category = None
+
         super(NoteForm, self).__init__(*args, **kwargs)
     
         self.fields["category"].queryset = Categories.objects.filter(login=login)
