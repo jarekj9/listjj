@@ -14,7 +14,7 @@
         <h5>Filter:</h5>
     </nav>
         <div style="margin: 10px;">
-        <form method="post" action="{% url 'index' %}">
+        <form method="post" action="{% url 'index' %}" id="filterForm">
             <div class="auto-submit">
                 {% csrf_token %}
                 <table class='filterTable'>
@@ -289,12 +289,19 @@ $(document).on('click', '.deleteNoteButton', function(e) {
 
 });
 
-//date picker widget
+// date picker widget
 $( function() {
 $( "#datepicker1" ).datepicker({dateFormat: 'yy-mm-dd'});
 $( "#datepicker2" ).datepicker({dateFormat: 'yy-mm-dd'});
 } );
 
+// auto change filter when category in add-form is changed
+$('select#id_category').change(function () {
+     var optionSelected = $(this).find("option:selected");
+     var valueSelected  = optionSelected.val();
+     $("select#filter_category").val(valueSelected).change();
+     $("#filterForm").submit();
+ });
 
 
 </script>

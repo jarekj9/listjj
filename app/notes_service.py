@@ -58,8 +58,11 @@ class NotesService:
             return filter
 
         # change filter to last choices from cookies, if it exist
-        if request.session.get("category") not in [[None], None,]:
-            category_id = Categories.objects.get(id=request.session["category"][0])
+        if request.session.get("category"):
+            if request.session.get("category") == [None]:
+                category_id = None
+            else:
+                category_id = Categories.objects.get(id=request.session["category"][0])
             filter.update(
                 {
                     "category": [category_id],

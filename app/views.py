@@ -173,6 +173,9 @@ class AddCategoryView(LoginRequiredMixin, GroupMembershipRequired, View):
         '''Save new category'''
         if self.category_form.is_valid():
             category = self.category_form.cleaned_data["category"]
+            category_exists = Categories.objects.filter(category=category, login=request.user)
+            if category_exists:
+                return HttpResponse("Category with such name exists !")
             newcategory = Categories(login=request.user, category=category)
             newcategory.save()
             return redirect("/modify_categories")

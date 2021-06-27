@@ -60,6 +60,7 @@ class NoteForm(forms.Form):
         except AttributeError:  # profile.default_category does not exist yet
             default_category = (0, 0)
         if recent_category:
+            print(recent_category)
             default_category = Categories.objects.get(login=login, category=recent_category)
         self.fields["category"].initial = default_category
     class Meta:  # because date variable is ignored in the Form (it is set in AddNoteView method)
@@ -104,7 +105,7 @@ class FilterNotesForm(forms.Form):
     category = CategoryModelChoiceField(
         label="Category ",
         required=False,
-        widget=forms.Select(attrs={"onChange": "refresh()"}),
+        widget=forms.Select(attrs={"id": "filter_category"}),
         empty_label="all",
         queryset=None,
     )  # queryset is None because i have it in init
